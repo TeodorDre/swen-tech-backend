@@ -11,7 +11,7 @@ class ApplicationError:
         print(name, message)
 
 
-class BaseServer:
+class Application:
     def __init__(self):
         self.port = 3330
         self.store = None
@@ -31,6 +31,7 @@ class BaseServer:
         self.store = JSONStore(store_path)
 
 
-server = BaseServer()
+def create_app():
+    app = Application()
 
-server.init_services()
+    return app
