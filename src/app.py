@@ -1,10 +1,14 @@
 from pathlib import Path
 import os
+from src.server.code.store import JSONStore
 
 
-class JSONStore:
-    def __init__(self, path):
-        self.path = path
+class ApplicationError:
+    def __init__(self, name, message):
+        self.name = name
+        self.message = message
+
+        print(name, message)
 
 
 class BaseServer:
