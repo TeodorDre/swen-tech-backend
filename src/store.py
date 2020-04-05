@@ -1,7 +1,13 @@
-from src.app import ApplicationError
 import json
 
 STORE_ERROR_NAME = 'StoreError'
+
+class ApplicationError:
+    def __init__(self, name, message):
+        self.name = name
+        self.message = message
+
+        print(name, message)
 
 
 class StoreError(ApplicationError):

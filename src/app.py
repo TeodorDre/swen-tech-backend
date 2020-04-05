@@ -1,14 +1,7 @@
 from pathlib import Path
 import os
-from src.server.code.store import JSONStore
+from src.store import JSONStore
 
-
-class ApplicationError:
-    def __init__(self, name, message):
-        self.name = name
-        self.message = message
-
-        print(name, message)
 
 
 class Application:
@@ -33,5 +26,7 @@ class Application:
 
 def create_app():
     app = Application()
+
+    app.init_services()
 
     return app
