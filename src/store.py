@@ -2,6 +2,7 @@ import json
 
 STORE_ERROR_NAME = 'StoreError'
 
+
 class ApplicationError:
     def __init__(self, name, message):
         self.name = name
@@ -34,6 +35,7 @@ class JSONStore:
             serialized_data = json.dumps(self.cache)
 
             stream = open(self.path, encoding='utf-8', mode="w")
+
             stream.write(serialized_data)
 
             stream.close()

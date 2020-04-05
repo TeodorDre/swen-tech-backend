@@ -12,7 +12,7 @@ def setup_logging(config: dict):
     )
 
 
-def run_app():
+def run_app(port: int):
     print(sys.path[0])
     create_app()
 

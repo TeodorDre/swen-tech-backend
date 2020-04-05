@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 from src.store import JSONStore
-
+from aiohttp import web
 
 
 class Application:
@@ -25,8 +25,6 @@ class Application:
 
 
 def create_app():
-    app = Application()
-
-    app.init_services()
+    web_app = web.Application()
 
     return app
