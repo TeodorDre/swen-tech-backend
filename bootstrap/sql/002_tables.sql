@@ -2,22 +2,6 @@ create schema if not exists markup;
 drop schema markup cascade;
 create schema if not exists markup;
 
--- CREATE TABLE if not exists markup.teams (
---   team_id    SERIAL PRIMARY KEY,
---   team_name  TEXT        NOT NULL,
---   created_ts TIMESTAMPTZ NOT NULL default now(),
---   updated_ts TIMESTAMPTZ NOT NULL default now()
--- );
---
--- CREATE TABLE if not exists markup.users (
---  team_id    BIGINT      not null references markup.teams,
---  username   TEXT        NOT NULL unique,
---  email      TEXT        not null,
---  password   TEXT        NOT NULL,
---  created_ts TIMESTAMPTZ NOT NULL default now(),
---  updated_ts TIMESTAMPTZ NOT NULL default now()
---);
-
 CREATE TABLE if not exists markup.users (
   client_id     SERIAL      PRIMARY KEY NOT NULL unique,
   client_name   TEXT        NOT NULL,
@@ -35,16 +19,7 @@ CREATE TABLE if not exists markup.sessions (
 
   created_ts    TIMESTAMPTZ NOT NULL default now(),
   CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
-)
-
--- CREATE TABLE if not exists markup.projects (
---   project_id          SERIAL PRIMARY KEY,
---   project_name        TEXT        NOT NULL,
---   project_description TEXT,
---   team_id             INTEGER     not null references markup.teams,
---   created_ts          TIMESTAMPTZ NOT NULL default now(),
---   updated_ts          TIMESTAMPTZ NOT NULL default now()
--- );
+);
 
 CREATE TABLE if not exists markup.projects (
   project_id          SERIAL PRIMARY KEY,

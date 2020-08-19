@@ -24,7 +24,9 @@ __all__ = [
 # TODO: {table}_ID check before trying to Insert or smth else (will not crash sequence order in tables)
 
 
-async def session_login(request, body) -> web.Response:
+async def session_login(request) -> web.Response:
+    body = await request.json()
+
     user_email = body['email']
     user_password = body['password']
 
@@ -58,7 +60,9 @@ async def session_login(request, body) -> web.Response:
         return send_unexpected_error_response()
 
 
-async def session_logout(request, body) -> web.Response:
+async def session_logout(request) -> web.Response:
+    body = await request.json()
+
     session_id = body['sessionId']
 
     async with request.app['db'].acquire() as conn:
@@ -72,7 +76,10 @@ async def session_logout(request, body) -> web.Response:
             return send_unexpected_error_response()
 
 
-async def session_info(request, body) -> web.Response:
+async def session_info(request) -> web.Response:
+    body = await request.json()
+
+
     session_id = body['sessionId']
 
     async with request.app['db'].acquire() as conn:

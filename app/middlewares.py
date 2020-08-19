@@ -23,6 +23,7 @@ async def json_checker(request, handler):
     '''
 
     logging.info(f'New request for handler: {handler.__name__}')
+
     if handler in JSON_HANDLERS:
         if request.content_type != 'application/json':
             logging.error(f'Request without json payload: {await request.text()}')
@@ -38,6 +39,4 @@ async def json_checker(request, handler):
             return web.json_response({'error': 'Check JSON fields and types'}, status=BAD_REQUEST)
         return await handler(request, body)
     else:
-        body = await request.json()
-        return await handler(request, body)
-
+        return await handler(request)
