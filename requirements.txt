@@ -18,3 +18,4 @@ six==1.11.0
 SQLAlchemy==1.2.11
 wrapt==1.10.11
 yarl==1.2.6
+jsonify==0.5

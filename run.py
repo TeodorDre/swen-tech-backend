@@ -1,7 +1,7 @@
 import logging
-import sys
-
-from src.app import create_app
+from aiohttp import web
+from app.app import create_app
+from configuration import APP, LOGGER_CONFIG
 
 
 def setup_logging(config: dict):
@@ -13,9 +13,10 @@ def setup_logging(config: dict):
 
 
 def run_app(port: int):
-    print(sys.path[0])
-    create_app()
+    app = create_app()
+    web.run_app(app, port=port)
 
 
 if __name__ == '__main__':
-    run_app()
+    setup_logging(config=LOGGER_CONFIG)
+    run_app(port=APP['port'])

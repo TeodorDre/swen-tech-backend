@@ -1,4 +1,6 @@
-.DS_STORE
+.DS_Store
 .idea
-.idea/
-venv
+__pycache__
+
+config.yml
+*.json
