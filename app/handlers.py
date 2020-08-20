@@ -34,6 +34,8 @@ async def session_login(request) -> web.Response:
         async with request.app['db'].acquire() as conn:
             result = await conn.execute(users.select().where(users.c.client_email == user_email))
 
+            print(result.rowcount)
+
             if result.rowcount == 0:
                 return send_not_found_response()
 
@@ -78,7 +80,6 @@ async def session_logout(request) -> web.Response:
 
 async def session_info(request) -> web.Response:
     body = await request.json()
-
 
     session_id = body['sessionId']
 
