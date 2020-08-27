@@ -1,3 +1,3 @@
-create role markup WITH LOGIN PASSWORD 'password';
-create database markup;
-GRANT ALL PRIVILEGES ON DATABASE markup TO markup;
+create role teodor WITH LOGIN PASSWORD 'password';
+create database swentech;
+GRANT ALL PRIVILEGES ON DATABASE swentech TO teodor;

@@ -20,3 +20,4 @@ wrapt==1.10.11
 yarl==1.2.6
 jsonify==0.5
 aiohttp_cors==0.7.0
+mimesis==4.1.1

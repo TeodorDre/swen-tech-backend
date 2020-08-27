@@ -1,8 +1,7 @@
 from sqlalchemy import (
-    MetaData, Table, Column, TIMESTAMP, BigInteger,
-    TEXT, ForeignKeyConstraint, Integer, UniqueConstraint,
+    MetaData, Table, Column, TIMESTAMP,
+    TEXT, ForeignKeyConstraint, Integer, UniqueConstraint, ARRAY
 )
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
 
 # TODO: timestamp -> timestampTZ
@@ -33,78 +32,114 @@ sessions = Table(
     schema='markup'
 )
 
-projects = Table(
-    'projects', meta,
-    Column('project_id', Integer, primary_key=True, nullable=False),
-    Column('project_name', TEXT, nullable=False, unique=True),
-    Column('project_description', TEXT, nullable=True),
+categories = Table(
+    'categories', meta,
+    Column('category_id', Integer, primary_key=True, nullable=False),
+    Column('category_slug', TEXT, nullable=False, unique=True),
+    Column('created_by', Integer, unique=False, nullable=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
+
+    ForeignKeyConstraint(['created_by'], [users.c.client_id],
+                         name='created_by_client_id_fkey',
+                         ondelete=None),
+    UniqueConstraint('client_id', 'created_by', name='cl_created'),
     schema='markup'
 )
 
-datasets = Table(
-    'datasets', meta,
-    Column('dataset_id', Integer, primary_key=True, nullable=False),
-    Column('dataset_name', TEXT, nullable=False),
-    Column('dataset_description', TEXT, nullable=True),
-    Column('project_id', Integer, nullable=False),
+categories_lang = Table(
+    'categories_lang', meta,
+    Column('category_id', Integer, primary_key=True, nullable=False),
+    Column('name_ru', TEXT, nullable=False, unique=False),
+    Column('name_en', TEXT, nullable=False, unique=False),
+    Column('name_fr', TEXT, nullable=False, unique=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
-    # Indexes
-    ForeignKeyConstraint(['project_id'], [projects.c.project_id],
-                         name='datasets_project_id_fkey',
-                         ondelete='CASCADE'),
-    UniqueConstraint('dataset_name', 'project_id', name='ds_proj'),
-    schema='markup'
-)
-images = Table(
-    'images', meta,
-    Column('image_id', Integer, primary_key=True, nullable=False),
-    Column('image_name', TEXT, nullable=False),
-    Column('image_description', TEXT, nullable=True),
-    Column('image_link', TEXT, nullable=False),
-    Column('width', Integer, nullable=False),
-    Column('height', Integer, nullable=False),
-    Column('dataset_id', Integer, nullable=False),
-    Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
-    Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
-
-    # Indexes #
-    ForeignKeyConstraint(['dataset_id'], [datasets.c.dataset_id],
-                         name='images_dataset_id_fkey',
-                         ondelete='CASCADE'),
-    UniqueConstraint('image_name', 'dataset_id', name='im_ds'),
-    UniqueConstraint('image_link', 'dataset_id', name='link_ds'),
+    ForeignKeyConstraint(['category_id'], [categories.c.category_id],
+                         name='category_id_fkey',
+                         ondelete="CASCADE"),
+    UniqueConstraint('category_id', 'category_id', name='cl_created'),
     schema='markup'
 )
 
-annotations = Table(
-    'annotations', meta,
-    Column('image_id', BigInteger, nullable=False, unique=True),
-    Column('annotations', JSONB, nullable=False),
+tags = Table(
+    'tags', meta,
+    Column('tag_id', Integer, primary_key=True, nullable=False),
+    Column('tag_slug', TEXT, nullable=False, unique=True),
+    Column('created_by', Integer, unique=False, nullable=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
-    # Indexes #
-    ForeignKeyConstraint(['image_id'], [images.c.image_id],
-                         name='annotations_image_id_fkey',
-                         ondelete='CASCADE'),
+    ForeignKeyConstraint(['created_by'], [users.c.client_id],
+                         name='created_by_client_id_fkey',
+                         ondelete=None),
+    UniqueConstraint('client_id', 'created_by', name='cl_created'),
     schema='markup'
 )
 
-labels = Table(
-    'labels', meta,
-    Column('label_id', Integer, nullable=False, primary_key=True),
-    Column('label_name', TEXT, nullable=False),
-    Column('label_description', TEXT, nullable=True),
-    Column('color', TEXT, nullable=False),
-    Column('parameters', JSONB, nullable=True),
+tags_lang = Table(
+    'tags_lang', meta,
+    Column('tag_id', Integer, primary_key=True, nullable=False),
+    Column('name_ru', TEXT, nullable=False, unique=False),
+    Column('name_en', TEXT, nullable=False, unique=False),
+    Column('name_fr', TEXT, nullable=False, unique=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
-    schema='markup'
 
+    ForeignKeyConstraint(['tag_id'], [tags.c.tag_id],
+                         name='tag_id_fkey',
+                         ondelete="CASCADE"),
+    UniqueConstraint('tag_id', 'tag_id', name='cl_created'),
+    schema='markup'
+)
+
+posts = Table(
+    'posts', meta,
+    Column('post_id', Integer, primary_key=True, nullable=False),
+    Column('post_slug', TEXT, nullable=False, unique=True),
+    Column('post_url', TEXT, nullable=False, unique=True),
+
+    Column('post_featured_image', TEXT, nullable=False, unique=False),
+    Column('post_status', Integer, nullable=False, unique=True),
+    Column('post_category_id', Integer, nullable=False, unique=True),
+    Column('post_tags_id', ARRAY(Integer), nullable=False, unique=True),
+
+    Column('created_by', Integer, unique=False, nullable=False),
+    Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
+    Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
+
+    ForeignKeyConstraint(['created_by'], [users.c.client_id],
+                         name='created_by_client_id_fkey',
+                         ondelete=None),
+    UniqueConstraint('client_id', 'created_by', name='cl_created'),
+
+    ForeignKeyConstraint(['post_category_id'], [categories.c.category_id],
+                         name='post_category_id_category_id_fkey',
+                         ondelete=None),
+    UniqueConstraint('client_id', 'created_by', name='cl_created'),
+    schema='markup'
+)
+
+posts_lang = Table(
+    'posts_lang', meta,
+    Column('post_id', Integer, primary_key=True, nullable=False),
+    Column('text_ru', TEXT, nullable=False, unique=False),
+    Column('text_en', TEXT, nullable=False, unique=False),
+    Column('text_fr', TEXT, nullable=False, unique=False),
+
+    Column('title_ru', TEXT, nullable=False, unique=False),
+    Column('title_en', TEXT, nullable=False, unique=False),
+    Column('title_fr', TEXT, nullable=False, unique=False),
+
+    Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
+    Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
+
+    ForeignKeyConstraint(['post_id'], [posts.c.post_id],
+                         name='post_id_fkey',
+                         ondelete="CASCADE"),
+    UniqueConstraint('post_id', 'post_id', name='cl_created'),
+    schema='markup'
 )
 
 
@@ -115,7 +150,8 @@ def create_tables(engine) -> None:
     '''
     meta = MetaData()
     logging.info('Create all tables')
-    meta.create_all(bind=engine, tables=[projects, datasets, images, annotations, labels, users])
+    meta.create_all(bind=engine,
+                    tables=[users, sessions, categories, categories_lang, tags, tags_lang, posts, posts_lang])
 
 
 def drop_tables(engine) -> None:
@@ -124,7 +160,8 @@ def drop_tables(engine) -> None:
     '''
     meta = MetaData()
     logging.info('Drop all tables')
-    meta.drop_all(bind=engine, tables=[projects, datasets, images, annotations, labels, users])
+    meta.drop_all(bind=engine,
+                  tables=[users, sessions, categories, categories_lang, tags, tags_lang, posts, posts_lang])
 
 
 if __name__ == '__main__':

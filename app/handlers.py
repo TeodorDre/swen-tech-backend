@@ -12,12 +12,7 @@ from app.code.session import process_user_session, transform_session
 
 __all__ = [
     'echo', 'variable_handler',
-    'project_get', 'project_post', 'project_update', 'project_delete',
-    'dataset_get', 'dataset_post', 'dataset_update', 'dataset_delete',
-    'image_get', 'image_post', 'image_update', 'image_delete',
     'session_login', 'session_info', 'session_logout',
-    'label_get', 'label_post', 'label_update', 'label_delete',
-    'annotation_get', 'annotation_post', 'annotation_update', 'annotation_delete',
 ]
 
 
