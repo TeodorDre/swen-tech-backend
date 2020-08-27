@@ -1,8 +1,6 @@
 from aiohttp import web
 import logging
 from app.handlers import *
-from app.jsonschemas.json_schemas import SCHEMA
-from app.jsonschemas.geojson import GEOJSON
 from app.statuscodes import BAD_REQUEST
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
