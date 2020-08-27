@@ -29,7 +29,7 @@ sessions = Table(
                          name='sessions_client_id_fkey',
                          ondelete='CASCADE'),
     UniqueConstraint('client_id', 'session_id', name='cl_sess'),
-    schema='markup'
+    schema='swentech'
 )
 
 categories = Table(
@@ -44,7 +44,7 @@ categories = Table(
                          name='created_by_client_id_fkey',
                          ondelete=None),
     UniqueConstraint('client_id', 'created_by', name='cl_created'),
-    schema='markup'
+    schema='swentech'
 )
 
 categories_lang = Table(
@@ -59,8 +59,8 @@ categories_lang = Table(
     ForeignKeyConstraint(['category_id'], [categories.c.category_id],
                          name='category_id_fkey',
                          ondelete="CASCADE"),
-    UniqueConstraint('category_id', 'category_id', name='cl_created'),
-    schema='markup'
+    UniqueConstraint('category_id', 'category_id', name='cl_category'),
+    schema='swentech'
 )
 
 tags = Table(
@@ -75,7 +75,7 @@ tags = Table(
                          name='created_by_client_id_fkey',
                          ondelete=None),
     UniqueConstraint('client_id', 'created_by', name='cl_created'),
-    schema='markup'
+    schema='swentech'
 )
 
 tags_lang = Table(
@@ -90,8 +90,8 @@ tags_lang = Table(
     ForeignKeyConstraint(['tag_id'], [tags.c.tag_id],
                          name='tag_id_fkey',
                          ondelete="CASCADE"),
-    UniqueConstraint('tag_id', 'tag_id', name='cl_created'),
-    schema='markup'
+    UniqueConstraint('tag_id', 'tag_id', name='cl_tag'),
+    schema='swentech'
 )
 
 posts = Table(
@@ -117,8 +117,8 @@ posts = Table(
     ForeignKeyConstraint(['post_category_id'], [categories.c.category_id],
                          name='post_category_id_category_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='cl_created'),
-    schema='markup'
+    UniqueConstraint('client_id', 'created_by', name='post_category_id'),
+    schema='swentech'
 )
 
 posts_lang = Table(
@@ -138,8 +138,8 @@ posts_lang = Table(
     ForeignKeyConstraint(['post_id'], [posts.c.post_id],
                          name='post_id_fkey',
                          ondelete="CASCADE"),
-    UniqueConstraint('post_id', 'post_id', name='cl_created'),
-    schema='markup'
+    UniqueConstraint('post_id', 'post_id', name='post_id'),
+    schema='swentech'
 )
 
 

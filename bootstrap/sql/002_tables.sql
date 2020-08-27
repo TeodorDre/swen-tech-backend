@@ -18,53 +18,90 @@ CREATE TABLE if not exists swentech.sessions (
   session_id    TEXT        NOT NULL unique,
 
   created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+
+  CONSTRAINT    CL_SESS     UNIQUE (client_id, session_id)
 );
 
 CREATE TABLE if not exists swentech.categories (
-  client_id     SERIAL      not null unique references swentech.users ON DELETE CASCADE,
-  session_id    TEXT        NOT NULL unique,
+  created_by      SERIAL      not null references swentech.users,
 
-  created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+  category_id     SERIAL      PRIMARY KEY not null unique,
+  category_slug   TEXT        NOT NULL unique,
+
+  created_ts      TIMESTAMPTZ NOT NULL default now(),
+  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT      CL_CREATED  UNIQUE (client_id, created_by)
 );
 
 CREATE TABLE if not exists swentech.categories_lang (
-  client_id     SERIAL      not null unique references swentech.users ON DELETE CASCADE,
-  session_id    TEXT        NOT NULL unique,
+  category_id     SERIAL      not null unique references swentech.categories ON DELETE CASCADE,
 
-  created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+  name_ru         TEXT        NOT NULL,
+  name_en         TEXT        NOT NULL,
+  name_fr         TEXT        NOT NULL,
+
+  created_ts      TIMESTAMPTZ NOT NULL default now(),
+  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT CL_CATEGORY UNIQUE (category_id, category_id)
 );
 
 CREATE TABLE if not exists swentech.tags (
-  client_id     SERIAL      not null unique references swentech.users ON DELETE CASCADE,
-  session_id    TEXT        NOT NULL unique,
+  tag_id          SERIAL      PRIMARY KEY not null unique,
+  tag_slug        TEXT        NOT NULL unique,
+  created_by      SERIAL      not null references swentech.users,
 
-  created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+  created_ts      TIMESTAMPTZ NOT NULL default now(),
+  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT      CL_CREATED  UNIQUE (created_by, client_id)
 );
 
 CREATE TABLE if not exists swentech.tags_lang (
-  client_id     SERIAL      not null unique references swentech.users ON DELETE CASCADE,
-  session_id    TEXT        NOT NULL unique,
+  tag_id     SERIAL    not null unique references swentech.tags ON DELETE CASCADE,
 
-  created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+  name_ru         TEXT        NOT NULL,
+  name_en         TEXT        NOT NULL,
+  name_fr         TEXT        NOT NULL,
+
+  created_ts      TIMESTAMPTZ NOT NULL default now(),
+  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT CL_TAG UNIQUE (tag_id, tag_id)
 );
 
 CREATE TABLE if not exists swentech.posts (
-  client_id     SERIAL      not null unique references swentech.users ON DELETE CASCADE,
-  session_id    TEXT        NOT NULL unique,
+  post_id                 SERIAL      PRIMARY KEY not null unique,
+  post_slug               TEXT        NOT NULL unique,
+  post_url                TEXT        NOT NULL unique,
 
-  created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+  post_featured_image     SERIAL      not null unique,
+  post_status             TEXT        NOT NULL unique,
+  post_category_id        TEXT        NOT NULL unique references swentech.categories,
+  post_tags_id            TEXT[]      NOT NULL unique,
+
+  created_by              SERIAL      not null references swentech.users,
+  created_ts              TIMESTAMPTZ NOT NULL default now(),
+  updated_ts              TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT              CL_CREATED       UNIQUE (created_by, client_id),
+  CONSTRAINT              POST_CATEGORY_ID UNIQUE (post_category_id, category_id)
 );
 
 CREATE TABLE if not exists swentech.posts_lang (
-  client_id     SERIAL      not null unique references swentech.users ON DELETE CASCADE,
-  session_id    TEXT        NOT NULL unique,
+  post_id          SERIAL    not null unique references swentech.posts ON DELETE CASCADE,
 
-  created_ts    TIMESTAMPTZ NOT NULL default now(),
-  CONSTRAINT CL_SESS UNIQUE (client_id, session_id)
+  title_ru         TEXT        NOT NULL,
+  title_en         TEXT        NOT NULL,
+  title_fr         TEXT        NOT NULL,
+
+  text_ru          TEXT        NOT NULL,
+  text_en          TEXT        NOT NULL,
+  text_fr          TEXT        NOT NULL,
+
+  created_ts      TIMESTAMPTZ NOT NULL default now(),
+  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT POST_ID UNIQUE (post_id, post_id)
 );
