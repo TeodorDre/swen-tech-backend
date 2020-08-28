@@ -19,47 +19,56 @@ CREATE TABLE if not exists swentech.sessions (
 
   created_ts    TIMESTAMPTZ NOT NULL default now(),
 
-  CONSTRAINT    CL_SESS     UNIQUE (client_id, session_id)
+  CONSTRAINT    CL_SESS     UNIQUE (session_id, client_id)
 );
 
 CREATE TABLE if not exists swentech.categories (
-  created_by      SERIAL      not null references swentech.users,
+  client_id       SERIAL      not null references swentech.users,
 
   category_id     SERIAL      PRIMARY KEY not null unique,
   category_slug   TEXT        NOT NULL unique,
 
+  created_by      SERIAL     NOT NULL,
+
   created_ts      TIMESTAMPTZ NOT NULL default now(),
   updated_ts      TIMESTAMPTZ NOT NULL default now(),
 
-  CONSTRAINT      CL_CREATED  UNIQUE (client_id, created_by)
+  CONSTRAINT      CL_CATEGORY_CREATED  UNIQUE (created_by, client_id)
 );
 
 CREATE TABLE if not exists swentech.categories_lang (
-  category_id     SERIAL      not null unique references swentech.categories ON DELETE CASCADE,
+  category_id      SERIAL      not null unique references swentech.categories ON DELETE CASCADE,
 
-  name_ru         TEXT        NOT NULL,
-  name_en         TEXT        NOT NULL,
-  name_fr         TEXT        NOT NULL,
+  category_lang_id SERIAL      NOT NULL,
 
-  created_ts      TIMESTAMPTZ NOT NULL default now(),
-  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+  name_ru          TEXT        NOT NULL,
+  name_en          TEXT        NOT NULL,
+  name_fr          TEXT        NOT NULL,
 
-  CONSTRAINT CL_CATEGORY UNIQUE (category_id, category_id)
+  created_ts       TIMESTAMPTZ NOT NULL default now(),
+  updated_ts       TIMESTAMPTZ NOT NULL default now(),
+
+  CONSTRAINT       CL_CATEGORY UNIQUE (category_lang_id, category_id)
 );
 
 CREATE TABLE if not exists swentech.tags (
+  client_id       SERIAL      not null references swentech.users,
+
   tag_id          SERIAL      PRIMARY KEY not null unique,
   tag_slug        TEXT        NOT NULL unique,
-  created_by      SERIAL      not null references swentech.users,
+
+  created_by      SERIAL      NOT NULL,
 
   created_ts      TIMESTAMPTZ NOT NULL default now(),
   updated_ts      TIMESTAMPTZ NOT NULL default now(),
 
-  CONSTRAINT      CL_CREATED  UNIQUE (created_by, client_id)
+  CONSTRAINT      CL_TAG_CREATED  UNIQUE (created_by, client_id)
 );
 
 CREATE TABLE if not exists swentech.tags_lang (
-  tag_id     SERIAL    not null unique references swentech.tags ON DELETE CASCADE,
+  tag_id          SERIAL      not null unique references swentech.tags ON DELETE CASCADE,
+
+  tag_lang_id     SERIAL      NOT NULL,
 
   name_ru         TEXT        NOT NULL,
   name_en         TEXT        NOT NULL,
@@ -68,29 +77,34 @@ CREATE TABLE if not exists swentech.tags_lang (
   created_ts      TIMESTAMPTZ NOT NULL default now(),
   updated_ts      TIMESTAMPTZ NOT NULL default now(),
 
-  CONSTRAINT CL_TAG UNIQUE (tag_id, tag_id)
+  CONSTRAINT CL_TAG UNIQUE (tag_lang_id, tag_id)
 );
 
 CREATE TABLE if not exists swentech.posts (
-  post_id                 SERIAL      PRIMARY KEY not null unique,
-  post_slug               TEXT        NOT NULL unique,
-  post_url                TEXT        NOT NULL unique,
+  client_id               SERIAL           not null references swentech.users,
+  category_id             SERIAL             NOT NULL unique references swentech.categories,
 
-  post_featured_image     SERIAL      not null unique,
-  post_status             TEXT        NOT NULL unique,
-  post_category_id        TEXT        NOT NULL unique references swentech.categories,
-  post_tags_id            TEXT[]      NOT NULL unique,
+  post_id                 SERIAL           PRIMARY KEY not null unique,
+  post_slug               TEXT             NOT NULL unique,
+  post_url                TEXT             NOT NULL unique,
 
-  created_by              SERIAL      not null references swentech.users,
-  created_ts              TIMESTAMPTZ NOT NULL default now(),
-  updated_ts              TIMESTAMPTZ NOT NULL default now(),
+  post_featured_image     SERIAL           not null unique,
+  post_status             TEXT             NOT NULL unique,
+  post_category_id        SERIAL             NOT NULL,
+  post_tags_id            TEXT[]           NOT NULL unique,
 
-  CONSTRAINT              CL_CREATED       UNIQUE (created_by, client_id),
+  created_by              SERIAL            NOT NULL,
+  created_ts              TIMESTAMPTZ      NOT NULL default now(),
+  updated_ts              TIMESTAMPTZ      NOT NULL default now(),
+
+  CONSTRAINT              CL_POST_CREATED  UNIQUE (created_by, client_id),
   CONSTRAINT              POST_CATEGORY_ID UNIQUE (post_category_id, category_id)
 );
 
 CREATE TABLE if not exists swentech.posts_lang (
-  post_id          SERIAL    not null unique references swentech.posts ON DELETE CASCADE,
+  post_id          SERIAL      not null unique references swentech.posts ON DELETE CASCADE,
+
+  post_lang_id     SERIAL      not null,
 
   title_ru         TEXT        NOT NULL,
   title_en         TEXT        NOT NULL,
@@ -103,5 +117,5 @@ CREATE TABLE if not exists swentech.posts_lang (
   created_ts      TIMESTAMPTZ NOT NULL default now(),
   updated_ts      TIMESTAMPTZ NOT NULL default now(),
 
-  CONSTRAINT POST_ID UNIQUE (post_id, post_id)
+  CONSTRAINT POST_ID UNIQUE (post_lang_id, post_id)
 );
