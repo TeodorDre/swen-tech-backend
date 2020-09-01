@@ -3,8 +3,8 @@ from aiohttp import web
 from app.utils import send_unexpected_error_response, send_not_found_response
 from app.code.session.session import process_user_session, transform_session
 import logging
-from app.statuscodes import *
 
+from app.base.network import HTTPStatusCode
 
 __all__ = [
     'session_login', 'session_info', 'session_logout',
@@ -20,8 +20,6 @@ async def session_login(request) -> web.Response:
     try:
         async with request.app['db'].acquire() as conn:
             result = await conn.execute(users.select().where(users.c.client_email == user_email))
-
-            print(result.rowcount)
 
             if result.rowcount == 0:
                 return send_not_found_response()
@@ -41,7 +39,7 @@ async def session_login(request) -> web.Response:
                 return web.json_response({
                     'result': 'success',
                     'session': transform_session(session, user)
-                }, status=OK)
+                }, status=HTTPStatusCode.OK)
 
     except Exception as e:
         logging.error(e)
@@ -62,6 +60,7 @@ async def session_logout(request) -> web.Response:
             return web.json_response(status=204)
         except Exception as e:
             logging.error(f'Unexpected Error: {e}')
+
             return send_unexpected_error_response()
 
 
@@ -91,7 +90,7 @@ async def session_info(request) -> web.Response:
                         return web.json_response({
                             'result': 'success',
                             'session': transform_session(session, user)
-                        }, status=OK)
+                        }, status=HTTPStatusCode.OK)
         except Exception as e:
             logging.error(f'Unexpected Error: {e}')
             return send_unexpected_error_response()

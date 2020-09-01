@@ -1,6 +1,6 @@
 from aiohttp import web
 from app.routes import setup_routes
-from app.utils import init_pg, close_pg
+from app.base.database import init_pg, close_pg
 from configuration import DB_CONFIG
 from app.middlewares import json_checker
 import aiohttp_cors
@@ -19,7 +19,7 @@ def create_app():
         )
     })
 
-    # setup views and routes
+    # setup views and router
     setup_routes(app)
 
     for route in list(app.router.routes()):

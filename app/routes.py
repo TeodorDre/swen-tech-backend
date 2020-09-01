@@ -7,7 +7,7 @@ def setup_routes(app):
 
     # Andrew Slesarenko (swen295@gmail.com)
 
-    # User routes
+    # User router
 
     app.router.add_post('/api/v1/session/login', session_login, name='session_login')
     app.router.add_post('/api/v1/session/logout', session_logout, name='session_logout')
