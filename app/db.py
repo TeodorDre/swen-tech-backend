@@ -16,7 +16,7 @@ users = Table(
 
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
-    schema='markup'
+    schema='swentech'
 )
 
 sessions = Table(
@@ -36,6 +36,7 @@ categories = Table(
     'categories', meta,
     Column('category_id', Integer, primary_key=True, nullable=False),
     Column('category_slug', TEXT, nullable=False, unique=True),
+
     Column('created_by', Integer, unique=False, nullable=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
@@ -43,7 +44,7 @@ categories = Table(
     ForeignKeyConstraint(['created_by'], [users.c.client_id],
                          name='created_by_client_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='cl_created'),
+    UniqueConstraint('client_id', 'created_by', name='cl_category_created'),
     schema='swentech'
 )
 
@@ -74,23 +75,23 @@ tags = Table(
     ForeignKeyConstraint(['created_by'], [users.c.client_id],
                          name='created_by_client_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='cl_created'),
+    UniqueConstraint('client_id', 'created_by', name='cl_tag_created'),
     schema='swentech'
 )
 
 tags_lang = Table(
     'tags_lang', meta,
-    Column('tag_id', Integer, primary_key=True, nullable=False),
+    Column('tag_lang_id', Integer, primary_key=True, nullable=False),
     Column('name_ru', TEXT, nullable=False, unique=False),
     Column('name_en', TEXT, nullable=False, unique=False),
     Column('name_fr', TEXT, nullable=False, unique=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
-    ForeignKeyConstraint(['tag_id'], [tags.c.tag_id],
+    ForeignKeyConstraint(['tag_lang_id'], [tags.c.tag_id],
                          name='tag_id_fkey',
                          ondelete="CASCADE"),
-    UniqueConstraint('tag_id', 'tag_id', name='cl_tag'),
+    UniqueConstraint('tag_id', 'tag_lang_id', name='cl_tag'),
     schema='swentech'
 )
 
@@ -112,7 +113,7 @@ posts = Table(
     ForeignKeyConstraint(['created_by'], [users.c.client_id],
                          name='created_by_client_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='cl_created'),
+    UniqueConstraint('client_id', 'created_by', name='cl_post_created'),
 
     ForeignKeyConstraint(['post_category_id'], [categories.c.category_id],
                          name='post_category_id_category_id_fkey',
@@ -123,7 +124,7 @@ posts = Table(
 
 posts_lang = Table(
     'posts_lang', meta,
-    Column('post_id', Integer, primary_key=True, nullable=False),
+    Column('post_lang_id', Integer, primary_key=True, nullable=False),
     Column('text_ru', TEXT, nullable=False, unique=False),
     Column('text_en', TEXT, nullable=False, unique=False),
     Column('text_fr', TEXT, nullable=False, unique=False),
@@ -135,10 +136,10 @@ posts_lang = Table(
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
-    ForeignKeyConstraint(['post_id'], [posts.c.post_id],
+    ForeignKeyConstraint(['post_lang_id'], [posts.c.post_id],
                          name='post_id_fkey',
                          ondelete="CASCADE"),
-    UniqueConstraint('post_id', 'post_id', name='post_id'),
+    UniqueConstraint('post_id', 'post_lang_id', name='post_id'),
     schema='swentech'
 )
 
