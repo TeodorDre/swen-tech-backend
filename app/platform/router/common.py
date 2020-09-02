@@ -1,24 +1,24 @@
+from enum import Enum
 from aiohttp import web
-import string
-import random
-from app.statuscodes import *
+from app.base.network import HTTPStatusCode
+
+
+class APIErrorCode(Enum):
+    BadRequest = 1,
+    UnexpectedError = 25
 
 
 def send_not_found_response():
     return web.json_response({
         'result': 'error',
-        'code': 1,
+        'code': APIErrorCode.BadRequest,
         'message': 'Incorrect password or email.'
-    }, status=OK)
+    }, status=HTTPStatusCode.OK)
 
 
 def send_unexpected_error_response():
     return web.json_response({
         'result': 'error',
-        'code': 25,
+        'code': APIErrorCode.UnexpectedError,
         'message': 'Unexpected error.'
-    }, status=OK)
-
-
-def generate_id(size=6, chars=string.ascii_lowercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+    }, status=HTTPStatusCode.OK)

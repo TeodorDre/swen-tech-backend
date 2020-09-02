@@ -1,5 +1,4 @@
 from aiohttp import web
-from app.statuscodes import *
 from sqlalchemy import sql
 from psycopg2 import IntegrityError
 from datetime import datetime
