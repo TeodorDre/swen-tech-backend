@@ -4,6 +4,9 @@ from app.base.database import init_pg, close_pg
 from configuration import DB_CONFIG
 import aiohttp_cors
 
+from app.main import instantiationService
+from app.platform.instantiation.instantiation_service import Accessor
+
 
 def create_app():
     app = web.Application(middlewares=[])
@@ -17,6 +20,13 @@ def create_app():
             allow_headers="*",
         )
     })
+
+    def get_log_service(accessor: Accessor):
+        log_service = accessor.get('log_service')
+
+        print(log_service)
+
+    instantiationService.invoke_function(get_log_service)
 
     # setup views and router
     setup_routes(app)

@@ -1,7 +1,7 @@
+__all__ = ['LogLevel', 'LogService']
+
 from app.platform.instantiation.disposable import Disposable
-
 from enum import Enum
-
 
 class LogLevel(Enum):
     Off = 0,

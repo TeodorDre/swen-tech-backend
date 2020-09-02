@@ -1,5 +1,7 @@
 from app.platform.instantiation.disposable import Disposable
 
+__all__ = ['ServiceCollection']
+
 
 class ServiceCollection(Disposable):
     def __init__(self, strict=False):
@@ -7,8 +9,8 @@ class ServiceCollection(Disposable):
 
         self.services = {}
 
-    def set(self, id, service):
-        self.services[id] = service
+    def set(self, identifier: str, service):
+        self.services[identifier] = service
 
-    def get(self, id):
-        return self.services.get(id)
+    def get(self, identifier: str):
+        return self.services.get(identifier)

@@ -9,6 +9,6 @@ def setup_routes(app):
 
     # User router
 
-    app.router.add_post('/api/v1/session/login', session_login, name='session_login')
-    app.router.add_post('/api/v1/session/logout', session_logout, name='session_logout')
-    app.router.add_post('/api/v1/session/info', session_info, name='session_info')
+    # app.router.add_post('/api/v1/session/login', session_login, name='session_login')
+    # app.router.add_post('/api/v1/session/logout', session_logout, name='session_logout')
+    # app.router.add_post('/api/v1/session/info', session_info, name='session_info')
