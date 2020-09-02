@@ -1,7 +1,8 @@
-__all__ = ['LogLevel', 'LogService']
-
 from app.platform.instantiation.disposable import Disposable
 from enum import Enum
+
+__all__ = ['LogLevel', 'LogService']
+
 
 class LogLevel(Enum):
     Off = 0,
@@ -14,24 +15,26 @@ class LogLevel(Enum):
 
 class LogService(Disposable):
     def __init__(self, log_level: LogLevel):
-        self.log_level = log_level
+        self.log_level = log_level.value[0]
 
     def info(self, message):
-        if self.log_level >= LogLevel.Info:
-            print('[INFO]' + message)
+        print(self.log_level)
+
+        if self.log_level >= LogLevel.Info.value[0]:
+            print('[INFO] ' + message)
 
     def debug(self, message):
-        if self.log_level >= LogLevel.Debug:
-            print('[DEBUG]' + message)
+        if self.log_level >= LogLevel.Debug.value[0]:
+            print('[DEBUG] ' + message)
 
     def warn(self, message):
-        if self.log_level >= LogLevel.Warning:
-            print('[WARN]' + message)
+        if self.log_level >= LogLevel.Warning.value[0]:
+            print('[WARN] ' + message)
 
     def error(self, message):
-        if self.log_level >= LogLevel.Error:
-            print('[ERROR]' + message)
+        if self.log_level >= LogLevel.Error.value[0]:
+            print('[ERROR] ' + message)
 
     def critical(self, message):
-        if self.log_level >= LogLevel.Critical:
-            print('[CRITICAL]' + message)
+        if self.log_level >= LogLevel.Critical.value[0]:
+            print('[CRITICAL] ' + message)

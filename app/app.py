@@ -6,6 +6,7 @@ import aiohttp_cors
 
 from app.main import instantiationService
 from app.platform.instantiation.instantiation_service import Accessor
+from app.platform.log.log_service import LogService
 
 
 def create_app():
@@ -21,12 +22,12 @@ def create_app():
         )
     })
 
-    def get_log_service(accessor: Accessor):
-        log_service = accessor.get('log_service')
+    def get_log_service(accessor: Accessor) -> LogService:
+        return accessor.get('log_service')
 
-        print(log_service)
+    log_service: LogService = instantiationService.invoke_function(get_log_service)
 
-    instantiationService.invoke_function(get_log_service)
+    log_service.info('Hello from log_service')
 
     # setup views and router
     setup_routes(app)
