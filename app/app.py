@@ -4,7 +4,7 @@ from app.base.database import init_pg, close_pg
 from configuration import DB_CONFIG
 import aiohttp_cors
 
-from app.main import instantiationService
+from app.main import instantiation_service
 from app.platform.instantiation.instantiation_service import Accessor
 from app.platform.log.log_service import LogService
 
@@ -25,7 +25,7 @@ def create_app():
     def get_log_service(accessor: Accessor) -> LogService:
         return accessor.get('log_service')
 
-    log_service: LogService = instantiationService.invoke_function(get_log_service)
+    log_service: LogService = instantiation_service.invoke_function(get_log_service)
 
     log_service.info('Hello from log_service')
 

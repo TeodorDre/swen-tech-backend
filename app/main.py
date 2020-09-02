@@ -2,15 +2,26 @@ from app.platform.instantiation.service_collection import ServiceCollection
 from app.platform.instantiation.instantiation_service import InstantiationService
 
 from app.platform.log.log_service import LogService, LogLevel
+from app.platform.lifecycle.lifecycle_service import LifecycleService
 
-__all__ = ['instantiationService']
+from app.platform.router.router_service import RouterService
+
+__all__ = ['instantiation_service']
 
 # Создаем коллекцию сервисов
 services = ServiceCollection()
 
 # Создаем основной инстанцирующий сервис
-instantiationService = InstantiationService(services)
+instantiation_service = InstantiationService(services)
 
 # log service
-logService = LogService(LogLevel.Info)
-services.set('log_service', logService)
+log_service = LogService(LogLevel.Info)
+services.set('log_service', log_service)
+
+# lifecycle service
+lifecycle_service = LifecycleService()
+services.set('lifecycle_service', lifecycle_service)
+
+# router service
+router_service = RouterService(log_service, lifecycle_service, instantiation_service)
+services.set('router_service', router_service)
