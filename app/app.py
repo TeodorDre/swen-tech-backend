@@ -2,12 +2,11 @@ from aiohttp import web
 from app.routes import setup_routes
 from app.base.database import init_pg, close_pg
 from configuration import DB_CONFIG
-from app.middlewares import json_checker
 import aiohttp_cors
 
 
 def create_app():
-    app = web.Application(middlewares=[json_checker])
+    app = web.Application(middlewares=[])
     # setup configuration
     app['config'] = DB_CONFIG
 

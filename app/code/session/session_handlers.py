@@ -1,6 +1,5 @@
 from app.db import users, sessions
 from aiohttp import web
-from app.utils import send_unexpected_error_response, send_not_found_response
 from app.code.session.session import process_user_session, transform_session
 import logging
 
