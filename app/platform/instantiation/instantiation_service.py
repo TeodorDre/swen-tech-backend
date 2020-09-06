@@ -2,6 +2,10 @@ from app.platform.instantiation.service_collection import ServiceCollection
 from app.platform.instantiation.disposable import Disposable
 from app.base.errors import ApplicationError
 
+from app.base.list import get_first_element
+
+import inspect
+
 __all__ = ['InstantiationService', 'Accessor']
 
 
@@ -39,3 +43,12 @@ class InstantiationService:
             return fn(accessor)
         finally:
             _done = True
+
+    def create_instance(self, instance):
+        args = inspect.getfullargspec(instance.__init__).args
+
+        args.remove('self')
+
+        print(args)
+
+        return instance

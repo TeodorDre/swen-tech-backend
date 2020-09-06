@@ -8,6 +8,10 @@ from app.main import instantiation_service
 from app.platform.instantiation.instantiation_service import Accessor
 from app.platform.log.log_service import LogService
 
+from app.platform.router.router_service import RouterService
+
+from app.platform.router.handlers.echo_handler import EchoRouteHandler
+
 
 def create_app():
     app = web.Application(middlewares=[])
@@ -26,8 +30,12 @@ def create_app():
         return accessor.get('log_service')
 
     log_service: LogService = instantiation_service.invoke_function(get_log_service)
-
     log_service.info('Hello from log_service')
+
+    router_service: RouterService = instantiation_service.invoke_function(
+        lambda accessor: accessor.get('router_service'))
+
+    router_service.add_route_handler(EchoRouteHandler)
 
     # setup views and router
     setup_routes(app)
