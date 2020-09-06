@@ -1,3 +1,3 @@
-class Disposable():
+class Disposable:
     def dispose(self):
         print()
