@@ -4,16 +4,16 @@ from aiohttp import web, hdrs
 from app.platform.router.common import send_success_response
 
 
-class EchoRouteHandler(RouteHandler):
-    path = '/echo'
+class SessionInfoHandler(RouteHandler):
+    path = '/session/info'
 
     def __init__(self, log_service: LogService):
         super().__init__(log_service)
 
-        self.path = EchoRouteHandler.path
-        self.request_type = hdrs.METH_GET
+        self.path = SessionInfoHandler.path
+        self.request_type = hdrs.METH_POST
 
-        self.name = 'common.echo'
+        self.name = 'client.session.info'
 
     def handler(self, request: web.Request) -> web.Response:
         return send_success_response(self.name, 'OK')

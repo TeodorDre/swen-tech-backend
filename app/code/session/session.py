@@ -1,5 +1,5 @@
 from app.db import sessions
-from app.utils import generate_id
+from app.base.uuid import generate_id
 
 
 async def process_user_session(request, user):

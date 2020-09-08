@@ -5,10 +5,12 @@ from app.platform.router.common import send_not_found_response
 
 
 class VariableRouteHandler(RouteHandler):
+    path = '/{name}'
+
     def __init__(self, log_service: LogService):
         super().__init__(log_service)
 
-        self.path = '/{name}'
+        self.path = VariableRouteHandler.path
         self.request_type = hdrs.METH_GET
 
         self.name = 'common.variable'
