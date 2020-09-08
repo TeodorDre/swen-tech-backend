@@ -2,8 +2,6 @@ from app.platform.instantiation.service_collection import ServiceCollection
 from app.platform.instantiation.disposable import Disposable
 from app.base.errors import ApplicationError
 
-from app.base.list import get_first_element
-
 import inspect
 
 __all__ = ['InstantiationService', 'Accessor']
@@ -25,7 +23,7 @@ class Accessor(Disposable):
         instance = self.services.get(identifier)
 
         if not instance:
-            raise InstantiationError('[invokeFunction] unknown service ' + identifier)
+            raise InstantiationError('[invoke_function] unknown service ' + identifier)
 
         return instance
 
@@ -49,6 +47,14 @@ class InstantiationService:
 
         args.remove('self')
 
-        print(args)
+        services = []
 
-        return instance
+        for id in args:
+            service = self.services.get(id)
+
+            if not service:
+                raise InstantiationError('[create_instance] unknown service ' + id)
+
+            services.append(service)
+
+        return instance(*services)
