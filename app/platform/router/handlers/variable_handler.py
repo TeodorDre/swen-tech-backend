@@ -1,7 +1,7 @@
 from app.platform.router.router_handler import RouteHandler
 from app.platform.log.log_service import LogService
 from aiohttp import web, hdrs
-from app.base.network import HTTPStatusCode
+from app.platform.router.common import send_not_found_response
 
 
 class VariableRouteHandler(RouteHandler):
@@ -14,7 +14,6 @@ class VariableRouteHandler(RouteHandler):
         self.name = 'common.variable'
 
     def handler(self, request: web.Request) -> web.Response:
-        self.log_service.info('VariableRouteHandler - variable called')
+        result = f"Path: '{request.match_info['name']}' does't available"
 
-        return web.json_response({'error': f"Path: '{request.match_info['name']}' does't available"},
-                                 status=HTTPStatusCode.NOT_FOUND.value[0])
+        return send_not_found_response(self.name, result)

@@ -1,7 +1,7 @@
 from app.platform.router.router_handler import RouteHandler
 from app.platform.log.log_service import LogService
 from aiohttp import web, hdrs
-from app.base.network import HTTPStatusCode
+from app.platform.router.common import send_success_response
 
 
 class EchoRouteHandler(RouteHandler):
@@ -14,6 +14,4 @@ class EchoRouteHandler(RouteHandler):
         self.name = 'common.echo'
 
     def handler(self, request: web.Request) -> web.Response:
-        self.log_service.info('EchoRouteHandler - echo called')
-
-        return web.json_response({'status': 'OK'}, status=HTTPStatusCode.OK.value[0])
+        return send_success_response(self.name, 'OK')

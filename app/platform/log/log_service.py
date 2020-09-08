@@ -18,8 +18,6 @@ class LogService(Disposable):
         self.log_level = log_level.value[0]
 
     def info(self, message):
-        print(self.log_level)
-
         if self.log_level >= LogLevel.Info.value[0]:
             print('[INFO] ' + message)
 

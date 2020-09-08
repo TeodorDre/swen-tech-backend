@@ -17,9 +17,6 @@ class Accessor(Disposable):
         self.done = is_done
 
     def get(self, identifier: str):
-        if not self.done:
-            print('Service accessor is only valid during the invocation of its target method')
-
         instance = self.services.get(identifier)
 
         if not instance:
