@@ -10,6 +10,7 @@ from app.platform.router.handlers.echo_handler import EchoRouteHandler
 from app.platform.router.handlers.variable_handler import VariableRouteHandler
 from app.platform.router.router_handler import RouteHandler
 from typing import List
+from app.platform.router.all_handlers import all_routes
 
 
 def create_app():
@@ -30,6 +31,9 @@ def create_app():
 
     router_service.add_route_handler(EchoRouteHandler)
     router_service.add_route_handler(VariableRouteHandler)
+
+    for route in all_routes:
+        router_service.add_route_handler(route)
 
     # setup views and router
     setup_routes(app, router_service.routes)

@@ -7,4 +7,4 @@ __all__ = ['routes']
 routes = [SessionLoginHandler, SessionInfoHandler, SessionLogoutHandler]
 
 for route in routes:
-    print(route)
+    route.path = '/v1' + route.path

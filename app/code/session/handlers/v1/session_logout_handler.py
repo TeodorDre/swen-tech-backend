@@ -5,7 +5,7 @@ from app.platform.router.common import send_success_response
 
 
 class SessionLogoutHandler(RouteHandler):
-    path = '/session/login'
+    path = '/session/logout'
 
     def __init__(self, log_service: LogService):
         super().__init__(log_service)
