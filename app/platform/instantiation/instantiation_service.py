@@ -49,11 +49,11 @@ class InstantiationService:
 
         services = []
 
-        for id in args:
-            service = self.services.get(id)
+        for identifier in args:
+            service = self.services.get(identifier)
 
             if not service:
-                raise InstantiationError('[create_instance] unknown service ' + id)
+                raise InstantiationError('[create_instance] unknown service ' + identifier)
 
             services.append(service)
 

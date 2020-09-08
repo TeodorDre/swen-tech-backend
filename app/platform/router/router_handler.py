@@ -7,3 +7,7 @@ class RouteHandler(Disposable):
         self.log_service = log_service
 
         self.path = ''
+        self.request_type = ''
+
+    def handler(self):
+        pass
