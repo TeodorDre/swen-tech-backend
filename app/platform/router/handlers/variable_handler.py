@@ -11,6 +11,8 @@ class VariableRouteHandler(RouteHandler):
         self.path = '/{name}'
         self.request_type = hdrs.METH_GET
 
+        self.name = 'common.variable'
+
     def handler(self, request: web.Request) -> web.Response:
         self.log_service.info('VariableRouteHandler - variable called')
 

@@ -1,5 +1,6 @@
 from app.platform.instantiation.disposable import Disposable
 from app.platform.log.log_service import LogService
+from aiohttp import web
 
 
 class RouteHandler(Disposable):
@@ -8,6 +9,7 @@ class RouteHandler(Disposable):
 
         self.path = ''
         self.request_type = ''
+        self.name = ''
 
-    def handler(self):
+    def handler(self, request: web.Request) -> web.Response:
         pass

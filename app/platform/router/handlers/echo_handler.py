@@ -4,7 +4,6 @@ from aiohttp import web, hdrs
 from app.base.network import HTTPStatusCode
 
 
-
 class EchoRouteHandler(RouteHandler):
     def __init__(self, log_service: LogService):
         super().__init__(log_service)
@@ -12,7 +11,9 @@ class EchoRouteHandler(RouteHandler):
         self.path = '/echo'
         self.request_type = hdrs.METH_GET
 
-    def handler(self) -> web.Response:
+        self.name = 'common.echo'
+
+    def handler(self, request: web.Request) -> web.Response:
         self.log_service.info('EchoRouteHandler - echo called')
 
         return web.json_response({'status': 'OK'}, status=HTTPStatusCode.OK.value[0])
