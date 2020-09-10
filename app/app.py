@@ -14,8 +14,9 @@ from typing import List
 from app.platform.router.all_handlers import all_routes
 
 from app.platform.middleware.middleware_service import MiddlewareService
-from app.platform.middleware.middlewares.log_middleware_handler import LogMiddleware
+from app.platform.middleware.middlewares.log_middleware_middleware import LogMiddleware
 from app.platform.middleware.middleware_handler import MiddlewareHandler
+from app.platform.middleware.middlewares.json_response_type_middleware import JSONResponseTypeMiddleware
 from app.code.middleware import all_middlewares
 
 
@@ -47,6 +48,7 @@ def create_app():
     )
 
     middleware_service.register_middleware(LogMiddleware)
+    middleware_service.register_middleware(JSONResponseTypeMiddleware)
 
     for middleware in all_middlewares:
         if issubclass(middleware, MiddlewareHandler):

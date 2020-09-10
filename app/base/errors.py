@@ -5,6 +5,13 @@ class ApplicationError(Exception):
         super().__init__(self.message)
 
 
+class NetworkError(ApplicationError):
+    def __init__(self, message: str):
+        self.message = message
+
+        super().__init__(self.message)
+
+
 class ValidationError(ApplicationError):
     def __init__(self, message: str):
         super().__init__(message)
