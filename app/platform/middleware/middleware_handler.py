@@ -6,5 +6,5 @@ class MiddlewareHandler(Disposable):
     def __init__(self):
         pass
 
-    def call(self, request: web.Request, handler):
+    def call(self, request_name: str, request: web.Request, handler):
         pass

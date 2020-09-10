@@ -11,9 +11,7 @@ class LogMiddleware(MiddlewareHandler):
 
         self.routes = []
 
-    async def call(self, request: web.Request, handler):
-        self.log_service.info('LogMiddleware - request ' + request.match_info.route.name + ' called.')
+    async def call(self, request_name: str, request: web.Request, handler):
+        self.log_service.info('LogMiddleware - request ' + request_name + ' called.')
 
-        response = await handler(request)
-
-        return response
+        return await handler(request)

@@ -12,14 +12,19 @@ from app.platform.router.router_handler import RouteHandler
 
 from typing import List
 from app.platform.router.all_handlers import all_routes
+
 from app.platform.middleware.middleware_service import MiddlewareService
 from app.platform.middleware.middlewares.log_middleware_handler import LogMiddleware
+from app.platform.middleware.middleware_handler import MiddlewareHandler
+from app.code.middleware import all_middlewares
 
 
 def middleware_factory(middleware):
     @web.middleware
     async def middleware_call(request, handler):
-        return await middleware(request, handler)
+        request_name = request.match_info.route.name
+
+        return await middleware(request_name, request, handler)
 
     return middleware_call
 
@@ -33,7 +38,8 @@ def create_app():
     router_service.add_route_handler(VariableRouteHandler)
 
     for route in all_routes:
-        router_service.add_route_handler(route)
+        if issubclass(route, RouteHandler):
+            router_service.add_route_handler(route)
 
     # setup middleware
     middleware_service: MiddlewareService = instantiation_service.invoke_function(
@@ -42,7 +48,11 @@ def create_app():
 
     middleware_service.register_middleware(LogMiddleware)
 
-    middlewares = map(lambda middleware: middleware_factory(middleware.call), middleware_service.middlewares)
+    for middleware in all_middlewares:
+        if issubclass(middleware, MiddlewareHandler):
+            middleware_service.register_middleware(middleware)
+
+    middlewares = map(lambda middleware_item: middleware_factory(middleware_item.call), middleware_service.middlewares)
 
     # create application
     app = web.Application(middlewares=middlewares)
