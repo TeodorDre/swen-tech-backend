@@ -23,15 +23,15 @@ CREATE TABLE if not exists swentech.sessions (
 );
 
 CREATE TABLE if not exists swentech.categories (
-  client_id       SERIAL      not null references swentech.users,
+  client_id       SERIAL               not null references swentech.users,
 
-  category_id     SERIAL      PRIMARY KEY not null unique,
-  category_slug   TEXT        NOT NULL unique,
+  category_id     SERIAL               PRIMARY KEY not null unique,
+  category_slug   TEXT                 NOT NULL unique,
 
-  created_by      SERIAL     NOT NULL,
+  created_by      SERIAL               NOT NULL,
 
-  created_ts      TIMESTAMPTZ NOT NULL default now(),
-  updated_ts      TIMESTAMPTZ NOT NULL default now(),
+  created_ts      TIMESTAMPTZ          NOT NULL default now(),
+  updated_ts      TIMESTAMPTZ          NOT NULL default now(),
 
   CONSTRAINT      CL_CATEGORY_CREATED  UNIQUE (created_by, client_id)
 );

@@ -4,7 +4,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 
-# TODO: timestamp -> timestampTZ
 meta = MetaData()
 
 users = Table(
@@ -21,7 +20,7 @@ users = Table(
 
 sessions = Table(
     'sessions', meta,
-    Column('client_id', Integer, unique=True, nullable=False),
+    Column('client_id', Integer, nullable=False),
     Column('session_id', TEXT, nullable=False, unique=True),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
@@ -34,6 +33,7 @@ sessions = Table(
 
 categories = Table(
     'categories', meta,
+    Column('client_id', Integer, nullable=False),
     Column('category_id', Integer, primary_key=True, nullable=False),
     Column('category_slug', TEXT, nullable=False, unique=True),
 
@@ -44,7 +44,7 @@ categories = Table(
     ForeignKeyConstraint(['created_by'], [users.c.client_id],
                          name='created_by_client_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='cl_category_created'),
+    UniqueConstraint('created_by', 'client_id', name='cl_category_created'),
     schema='swentech'
 )
 
@@ -66,6 +66,7 @@ categories_lang = Table(
 
 tags = Table(
     'tags', meta,
+    Column('client_id', Integer, nullable=False),
     Column('tag_id', Integer, primary_key=True, nullable=False),
     Column('tag_slug', TEXT, nullable=False, unique=True),
     Column('created_by', Integer, unique=False, nullable=False),
@@ -82,6 +83,7 @@ tags = Table(
 tags_lang = Table(
     'tags_lang', meta,
     Column('tag_lang_id', Integer, primary_key=True, nullable=False),
+    Column('tag_id', Integer, nullable=False),
     Column('name_ru', TEXT, nullable=False, unique=False),
     Column('name_en', TEXT, nullable=False, unique=False),
     Column('name_fr', TEXT, nullable=False, unique=False),
@@ -97,6 +99,7 @@ tags_lang = Table(
 
 posts = Table(
     'posts', meta,
+    Column('client_id', Integer, nullable=False),
     Column('post_id', Integer, primary_key=True, nullable=False),
     Column('post_slug', TEXT, nullable=False, unique=True),
     Column('post_url', TEXT, nullable=False, unique=True),
@@ -106,7 +109,7 @@ posts = Table(
     Column('post_category_id', Integer, nullable=False, unique=True),
     Column('post_tags_id', ARRAY(Integer), nullable=False, unique=True),
 
-    Column('created_by', Integer, unique=False, nullable=False),
+    Column('created_by', Integer, nullable=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
@@ -124,6 +127,7 @@ posts = Table(
 
 posts_lang = Table(
     'posts_lang', meta,
+    Column('post_id', Integer, nullable=False),
     Column('post_lang_id', Integer, primary_key=True, nullable=False),
     Column('text_ru', TEXT, nullable=False, unique=False),
     Column('text_en', TEXT, nullable=False, unique=False),
@@ -145,10 +149,6 @@ posts_lang = Table(
 
 
 def create_tables(engine) -> None:
-    '''
-    Function for creating all needed for work tables
-    in already created database.
-    '''
     meta = MetaData()
     logging.info('Create all tables')
     meta.create_all(bind=engine,
@@ -156,9 +156,6 @@ def create_tables(engine) -> None:
 
 
 def drop_tables(engine) -> None:
-    '''
-    Function for dropping tables
-    '''
     meta = MetaData()
     logging.info('Drop all tables')
     meta.drop_all(bind=engine,
