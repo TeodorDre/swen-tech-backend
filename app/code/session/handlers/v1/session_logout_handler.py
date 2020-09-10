@@ -16,4 +16,5 @@ class SessionLogoutHandler(RouteHandler):
         self.name = 'client.session.logout'
 
     def handler(self, request: web.Request) -> web.Response:
+
         return send_success_response(self.name, 'OK')

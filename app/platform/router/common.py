@@ -24,6 +24,14 @@ def send_not_found_response(request_name: str, error_message: str = 'Not found')
     }, status=HTTPStatusCode.OK.value[0])
 
 
+def bad_request_response(request_name: str, error_message: str = 'Bad request') -> web.Response:
+    return web.json_response({
+        'request': request_name,
+        'errorCode': APIErrorCode.BadRequest.value[0],
+        'errorMessage': error_message
+    })
+
+
 def send_unexpected_error_response(request_name: str, ) -> web.Response:
     return web.json_response({
         'request': request_name,
