@@ -8,7 +8,11 @@ class MiddlewareService(Disposable):
     def __init__(self, lifecycle_service: LifecycleService, instantiation_service: InstantiationService):
         self.lifecycle_service = lifecycle_service
         self.instantiation_service = instantiation_service
-        self.middlewares = dict()
+        self.middlewares = []
 
-    def register_middleware(self, name: str, middleware: MiddlewareHandler):
-        self.middlewares[name] = middleware
+    def register_middleware(self, middleware) -> MiddlewareHandler:
+        instance = self.instantiation_service.create_instance(middleware)
+
+        self.middlewares.append(instance)
+
+        return instance

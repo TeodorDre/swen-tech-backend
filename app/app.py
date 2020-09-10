@@ -9,12 +9,42 @@ from app.platform.router.router_service import RouterService
 from app.platform.router.handlers.echo_handler import EchoRouteHandler
 from app.platform.router.handlers.variable_handler import VariableRouteHandler
 from app.platform.router.router_handler import RouteHandler
+
 from typing import List
 from app.platform.router.all_handlers import all_routes
+from app.platform.middleware.middleware_service import MiddlewareService
+from app.platform.middleware.middlewares.log_middleware_handler import LogMiddlewareHandler
 
 
 def create_app():
-    app = web.Application(middlewares=[])
+    router_service: RouterService = instantiation_service.invoke_function(
+        lambda accessor: accessor.get('router_service'))
+
+    router_service.add_route_handler(EchoRouteHandler)
+    router_service.add_route_handler(VariableRouteHandler)
+
+    for route in all_routes:
+        router_service.add_route_handler(route)
+
+    middleware_service: MiddlewareService = instantiation_service.invoke_function(
+        lambda accessor: accessor.get('middleware_service')
+    )
+
+    middleware_service.register_middleware(LogMiddlewareHandler)
+
+    middlewares = map(lambda middleware: middleware.call, middleware_service.middlewares)
+
+    def middleware_factory(middleware):
+        @web.middleware
+        async def middleware_call(request, handler):
+            return await middleware(request, handler)
+
+        return middleware_call
+
+    factory_middlewares = map(middleware_factory, middlewares)
+
+    app = web.Application(middlewares=factory_middlewares)
+
     # setup configuration
     app['config'] = DB_CONFIG
 
@@ -25,15 +55,6 @@ def create_app():
             allow_headers="*",
         )
     })
-
-    router_service: RouterService = instantiation_service.invoke_function(
-        lambda accessor: accessor.get('router_service'))
-
-    router_service.add_route_handler(EchoRouteHandler)
-    router_service.add_route_handler(VariableRouteHandler)
-
-    for route in all_routes:
-        router_service.add_route_handler(route)
 
     # setup views and router
     setup_routes(app, router_service.routes)
