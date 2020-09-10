@@ -5,6 +5,7 @@ from app.platform.log.log_service import LogService, LogLevel
 from app.platform.lifecycle.lifecycle_service import LifecycleService
 
 from app.platform.router.router_service import RouterService
+from app.platform.middleware.middleware_service import MiddlewareService
 
 __all__ = ['instantiation_service']
 
@@ -25,3 +26,7 @@ services.set('lifecycle_service', lifecycle_service)
 # router service
 router_service = RouterService(log_service, lifecycle_service, instantiation_service)
 services.set('router_service', router_service)
+
+# middleware service
+middleware_service = MiddlewareService(lifecycle_service, instantiation_service)
+services.set('middleware_service', middleware_service)
