@@ -19,15 +19,15 @@ def send_success_response(request_name: str, result) -> web.Response:
 def send_not_found_response(request_name: str, error_message: str = 'Not found') -> web.Response:
     return web.json_response({
         'request': request_name,
-        'errorCode': APIErrorCode.NotFoundError.value[0],
+        'errorCode': 2,
         'errorMessage': error_message
     }, status=HTTPStatusCode.OK.value[0])
 
 
-def bad_request_response(request_name: str, error_message: str = 'Bad request') -> web.Response:
+def send_bad_request_response(request_name: str, error_message: str = 'Bad request') -> web.Response:
     return web.json_response({
         'request': request_name,
-        'errorCode': APIErrorCode.BadRequest.value[0],
+        'errorCode': 1,
         'errorMessage': error_message
     })
 
@@ -35,6 +35,6 @@ def bad_request_response(request_name: str, error_message: str = 'Bad request') 
 def send_unexpected_error_response(request_name: str) -> web.Response:
     return web.json_response({
         'request': request_name,
-        'errorCode': APIErrorCode.UnexpectedError.value[0],
+        'errorCode': 25,
         'errorMessage': 'Unexpected error.'
     }, status=HTTPStatusCode.OK.value[0])

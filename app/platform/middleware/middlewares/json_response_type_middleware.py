@@ -1,13 +1,14 @@
 from app.platform.middleware.middleware_handler import MiddlewareHandler
 from aiohttp import web
 from app.base.errors import NetworkError
-from app.platform.router.common import bad_request_response
 from app.platform.router.router_service import RouterService
 
 
 class JSONResponseTypeMiddleware(MiddlewareHandler):
     def __init__(self, router_service: RouterService):
         super().__init__()
+
+        self.router_service = router_service
 
         self.routes = map(lambda route: route.name, router_service.routes)
 
@@ -16,7 +17,7 @@ class JSONResponseTypeMiddleware(MiddlewareHandler):
             try:
                 await self.handle(request_name, request)
             except NetworkError as error:
-                return bad_request_response(request_name, error.message)
+                return self.router_service.bad_request_response(request_name, error.message)
 
         return await handler(request)
 

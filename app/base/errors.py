@@ -15,3 +15,11 @@ class NetworkError(ApplicationError):
 class ValidationError(ApplicationError):
     def __init__(self, message: str):
         super().__init__(message)
+
+
+class DatabaseError(ApplicationError):
+    pass
+
+
+class DBRecordNotFoundError(DatabaseError):
+    pass
