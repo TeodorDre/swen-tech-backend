@@ -127,7 +127,7 @@ posts = Table(
 
 posts_lang = Table(
     'posts_lang', meta,
-    Column('post_id', Integer, nullable=False),
+    Column('post_id', Integer,  nullable=False),
     Column('post_lang_id', Integer, primary_key=True, nullable=False),
     Column('text_ru', TEXT, nullable=False, unique=False),
     Column('text_en', TEXT, nullable=False, unique=False),
