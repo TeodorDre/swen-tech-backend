@@ -19,5 +19,5 @@ class SessionService(Disposable):
 
                 return user
 
-    async def login_user(self, request: web.Request, user):
+    async def login_user(self, request: web.Request, user) -> web.Response:
         print(user)

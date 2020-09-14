@@ -3,6 +3,7 @@ from app.platform.log.log_service import LogService
 from aiohttp import web, hdrs
 from app.platform.router.router_service import RouterService
 from app.code.session.session_service import SessionService
+from app.base.errors import AuthenticatedError, AuthErrorCode
 
 
 class SessionLoginHandler(RouteHandler):
@@ -27,6 +28,12 @@ class SessionLoginHandler(RouteHandler):
             user = await self.session_service.get_user_session_by_email(request, body['email'])
 
             if user:
-                await self.session_service.login_user(request, user)
+                try:
+                    return await self.session_service.login_user(request, user)
+                except AuthenticatedError as error:
+                    if error is AuthErrorCode.InvalidPassword:
+                        return self.router_service.send_not_found_response(self.name, 'User not found')
+            else:
+                return self.router_service.send_not_found_response(self.name, 'User not found')
 
-        return self.router_service.send_success_response(self.name, 'OK')
+        return self.router_service.send_bad_request_response(self.name, 'Fields: [email, password] are required')
