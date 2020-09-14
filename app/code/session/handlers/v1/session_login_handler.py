@@ -29,10 +29,15 @@ class SessionLoginHandler(RouteHandler):
 
             if user:
                 try:
-                    return await self.session_service.login_user(request, user)
+                    session = await self.session_service.login_user(request, user)
+
+                    transformed_session = self.session_service.transform_session(session, user)
+
+                    return self.router_service.send_success_response(self.name, transformed_session)
                 except AuthenticatedError as error:
                     if error.type is AuthErrorCode.InvalidPassword:
-                        return self.router_service.send_not_found_response(self.name, 'Email or password are incorrect.')
+                        return self.router_service.send_not_found_response(self.name,
+                                                                           'Email or password are incorrect.')
             else:
                 return self.router_service.send_not_found_response(self.name, 'User not found.')
 
