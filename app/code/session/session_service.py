@@ -9,7 +9,7 @@ class SessionService(Disposable):
     def __init__(self):
         pass
 
-    async def get_user_session_by_email(self, request: web.Request, user_email: str):
+    async def get_user_by_email(self, request: web.Request, user_email: str):
         async with request.app['db'].acquire() as conn:
             result = await conn.execute(users.select().where(users.c.client_email == user_email))
 
@@ -34,9 +34,9 @@ class SessionService(Disposable):
         user.pop('created_ts', None)
         user.pop('updated_ts', None)
 
-        return await self.process_user_session(request, user)
+        return await self.create_or_get_user_session(request, user)
 
-    async def process_user_session(self, request: web.Request, user: dict):
+    async def create_or_get_user_session(self, request: web.Request, user: dict):
         user_client_id = user['client_id']
 
         async with request.app['db'].acquire() as conn:

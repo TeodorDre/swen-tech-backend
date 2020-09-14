@@ -25,7 +25,7 @@ class SessionLoginHandler(RouteHandler):
         body = await request.json()
 
         if 'email' in body and 'password' in body:
-            user = await self.session_service.get_user_session_by_email(request, body['email'])
+            user = await self.session_service.get_user_by_email(request, body['email'])
 
             if user:
                 try:
