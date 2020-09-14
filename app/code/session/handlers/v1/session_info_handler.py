@@ -34,10 +34,12 @@ class SessionInfoHandler(RouteHandler):
                 )
 
                 if session.rowcount == 0:
-                    return send_not_found_response(self.name, 'Session with id ' + session_id + ' was not found.')
+                    return send_not_found_response(self.name, 'Session was not found.')
                 else:
-                    return await self.do_handle(session, request, connection)
-            except Exception:
+                    return await self.do_handle(session, connection)
+            except Exception as error:
+                print(error)
+
                 return send_unexpected_error_response(self.name)
 
     async def do_handle(self, session_result, conn) -> web.Response:
