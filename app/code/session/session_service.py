@@ -1,6 +1,7 @@
 from app.platform.instantiation.disposable import Disposable
 from aiohttp import web
 from app.db import users
+from app.base.errors import AuthenticatedError, AuthErrorCode
 
 
 class SessionService(Disposable):
@@ -19,5 +20,17 @@ class SessionService(Disposable):
 
                 return user
 
-    async def login_user(self, request: web.Request, user) -> web.Response:
+    async def login_user(self, request: web.Request, user: dict) -> web.Response:
+        body = await request.json()
+
+        request_password = body['password']
+        user_password = user.get('password')
+
+        if user_password != request_password:
+            raise AuthenticatedError('', AuthErrorCode.InvalidPassword)
+
+        user.pop('password', None)
+        user.pop('created_ts', None)
+        user.pop('updated_ts', None)
+
         print(user)

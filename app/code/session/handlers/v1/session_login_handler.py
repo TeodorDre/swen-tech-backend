@@ -31,9 +31,9 @@ class SessionLoginHandler(RouteHandler):
                 try:
                     return await self.session_service.login_user(request, user)
                 except AuthenticatedError as error:
-                    if error is AuthErrorCode.InvalidPassword:
-                        return self.router_service.send_not_found_response(self.name, 'User not found')
+                    if error.type is AuthErrorCode.InvalidPassword:
+                        return self.router_service.send_not_found_response(self.name, 'Email or password are incorrect.')
             else:
-                return self.router_service.send_not_found_response(self.name, 'User not found')
+                return self.router_service.send_not_found_response(self.name, 'User not found.')
 
-        return self.router_service.send_bad_request_response(self.name, 'Fields: [email, password] are required')
+        return self.router_service.send_bad_request_response(self.name, 'Fields: [email, password] are required.')
