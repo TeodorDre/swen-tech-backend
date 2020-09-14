@@ -17,7 +17,7 @@ class JSONResponseTypeMiddleware(MiddlewareHandler):
             try:
                 await self.handle(request_name, request)
             except NetworkError as error:
-                return self.router_service.bad_request_response(request_name, error.message)
+                return self.router_service.send_bad_request_response(request_name, error.message)
 
         return await handler(request)
 

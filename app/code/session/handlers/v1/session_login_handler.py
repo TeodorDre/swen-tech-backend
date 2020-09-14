@@ -2,13 +2,13 @@ from app.platform.router.router_handler import RouteHandler
 from app.platform.log.log_service import LogService
 from aiohttp import web, hdrs
 from app.platform.router.router_service import RouterService
-from app.db import users
+from app.code.session.session_service import SessionService
 
 
 class SessionLoginHandler(RouteHandler):
     path = '/session/login'
 
-    def __init__(self, log_service: LogService, router_service: RouterService):
+    def __init__(self, log_service: LogService, router_service: RouterService, session_service: SessionService):
         super().__init__(log_service)
 
         self.path = SessionLoginHandler.path
@@ -16,13 +16,17 @@ class SessionLoginHandler(RouteHandler):
 
         self.router_service = router_service
         self.log_service = log_service
+        self.session_service = session_service
 
         self.name = 'client.session.login'
 
     async def handler(self, request: web.Request) -> web.Response:
         body = await request.json()
 
-        user_email = body['email']
-        user_password = body['password']
+        if 'email' in body and 'password' in body:
+            user = await self.session_service.get_user_session_by_email(request, body['email'])
+
+            if user:
+                await self.session_service.login_user(request, user)
 
         return self.router_service.send_success_response(self.name, 'OK')

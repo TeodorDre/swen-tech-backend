@@ -7,6 +7,8 @@ from app.platform.lifecycle.lifecycle_service import LifecycleService
 from app.platform.router.router_service import RouterService
 from app.platform.middleware.middleware_service import MiddlewareService
 
+from app.code.session.session_service import SessionService
+
 __all__ = ['instantiation_service']
 
 # Создаем коллекцию сервисов
@@ -30,3 +32,7 @@ services.set('router_service', router_service)
 # middleware service
 middleware_service = MiddlewareService(lifecycle_service, instantiation_service)
 services.set('middleware_service', middleware_service)
+
+# session service
+session_service = SessionService()
+services.set('session_service', session_service)
