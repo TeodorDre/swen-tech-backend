@@ -8,6 +8,7 @@ from app.platform.router.router_service import RouterService
 from app.platform.middleware.middleware_service import MiddlewareService
 
 from app.code.session.session_service import SessionService
+from app.code.tag.tag_service import TagService
 
 __all__ = ['instantiation_service']
 
@@ -36,3 +37,7 @@ services.set('middleware_service', middleware_service)
 # session service
 session_service = SessionService()
 services.set('session_service', session_service)
+
+# tag service
+tag_service = TagService()
+services.set('tag_service', tag_service)

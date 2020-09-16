@@ -14,7 +14,8 @@ class SessionIdMiddleware(MiddlewareHandler):
 
         self.routes = [
             'client.session.info',
-            'client.session.logout'
+            'client.session.logout',
+            'resources.tag.create'
         ]
 
     async def call(self, request_name: str, request: web.Request, handler):
@@ -33,7 +34,12 @@ class SessionIdMiddleware(MiddlewareHandler):
         body = await request.json()
 
         if 'sessionId' in body:
-            return await self.find_session(request, body['sessionId'])
+            session_id = body['sessionId']
+
+            if isinstance(session_id , str):
+                return await self.find_session(request, session_id )
+
+            raise ValidationError('Field sessionId must be a string')
         else:
             raise ValidationError('Field sessionId is required')
 

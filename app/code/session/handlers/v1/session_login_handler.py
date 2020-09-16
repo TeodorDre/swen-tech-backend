@@ -41,4 +41,4 @@ class SessionLoginHandler(RouteHandler):
             else:
                 return self.router_service.send_not_found_response(self.name, 'User not found.')
 
-        return self.router_service.send_bad_request_response(self.name, 'Fields: [email, password] are required.')
+        return self.router_service.send_bad_request_response(self.name, 'Fields email, password are required.')
