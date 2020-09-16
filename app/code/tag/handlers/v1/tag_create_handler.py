@@ -44,6 +44,8 @@ class TagCreateHandler(RouteHandler):
 
         session_id = body.pop('sessionId')
 
+        print(body)
+
         try:
             validate(body, CREATE_TAG_SCHEMA)
         except JSONValidationError as error:

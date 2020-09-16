@@ -5,22 +5,17 @@ CREATE_TAG_SCHEMA = {
             "type": "string",
             "minLength": 2
         },
-        "nameRu": {
-            "type": "string"
-        },
-        "nameEn": {
-            "type": "string"
-        },
-        "nameFr": {
-            "type": "string"
-        },
-
+        "translations": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            }
+        }
     },
     "required": [
         "slug",
-        "nameRu",
-        "nameEn",
-        "nameFr",
+        "translations",
     ],
     "additionalProperties": False
 }
