@@ -9,6 +9,8 @@ from jsonschema import validate, ValidationError as JSONValidationError
 from app.code.tag.validation.tag import CREATE_TAG_SCHEMA
 from app.platform.router.router_service import RouterService
 
+from app.db import tags, tags_lang
+
 '''
 # TAG_CREATE_STRUCT
 {
@@ -44,11 +46,17 @@ class TagCreateHandler(RouteHandler):
 
         session_id = body.pop('sessionId')
 
-        print(body)
-
         try:
             validate(body, CREATE_TAG_SCHEMA)
+
+            return await self.do_handle(request, body, session_id)
         except JSONValidationError as error:
             return self.router_service.send_bad_request_response(self.name, error.message)
 
-        return send_success_response(self.name, 'OK')
+    async def do_handle(self, request: web.Request, body: dict, session_id: str) -> web.Response:
+        async with request.app['db'].acquire() as conn:
+            try:
+                pass
+            except Exception as e:
+                pass
+            return send_success_response(self.name, 'OK')
