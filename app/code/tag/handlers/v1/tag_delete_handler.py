@@ -7,6 +7,8 @@ from app.platform.router.common import send_success_response
 from ...tag_service import TagService
 from jsonschema import validate, ValidationError as JSONValidationError
 from app.code.tag.validation.tag import DELETE_TAG_SCHEMA
+from psycopg2 import IntegrityError
+from app.base.errors import DBRecordNotFoundError
 
 
 class TagDeleteHandler(RouteHandler):
@@ -38,7 +40,9 @@ class TagDeleteHandler(RouteHandler):
     async def do_handle(self, body: dict):
         try:
             await self.tag_service.delete_tag(body['id'])
-        except Exception as error:
-            pass
+        except IntegrityError as error:
+            return self.router_service.send_bad_request_response(self.name, error.pgerror)
+        except DBRecordNotFoundError as error:
+            return self.router_service.send_not_found_response(self.name, error.message)
 
         return send_success_response(self.name, 'OK')
