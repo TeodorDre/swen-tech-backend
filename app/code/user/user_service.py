@@ -9,7 +9,7 @@ class UserService(Disposable):
         self.database_service = database_service
 
     async def create_user(self, user: dict):
-        pass
+        print(user)
 
     async def update_user(self):
         pass

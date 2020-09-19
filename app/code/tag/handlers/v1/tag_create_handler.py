@@ -48,6 +48,7 @@ class TagCreateHandler(RouteHandler):
 
         tag = body.copy()
         tag['client_id'] = session['client_id']
+
         try:
             tag_result = await self.tag_service.create_tag(tag)
 

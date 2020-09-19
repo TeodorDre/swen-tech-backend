@@ -1,19 +1,47 @@
 from app.platform.router.router_handler import RouteHandler
 from app.platform.log.log_service import LogService
+from app.code.user.user_service import UserService
+
 from aiohttp import web, hdrs
-from app.platform.router.common import send_success_response
+from ...validation.tag import CREATE_USER_SCHEMA
+from jsonschema import validate, ValidationError as JSONValidationError
+from psycopg2 import IntegrityError
+
+from app.platform.router.router_service import RouterService
+
+USER_CREATE_HANDLER_NAME = 'resources.user.create'
 
 
 class UserCreateHandler(RouteHandler):
     path = '/user'
 
-    def __init__(self, log_service: LogService):
+    def __init__(self, log_service: LogService, user_service: UserService, router_service: RouterService):
         super().__init__(log_service)
+
+        self.user_service = user_service
+        self.router_service = router_service
 
         self.path = UserCreateHandler.path
         self.request_type = hdrs.METH_POST
 
-        self.name = 'resources.user.create'
+        self.name = USER_CREATE_HANDLER_NAME
 
-    def handler(self, request: web.Request) -> web.Response:
-        return send_success_response(self.name, 'OK')
+    async def handler(self, request: web.Request) -> web.Response:
+        body: dict = await request.json()
+
+        try:
+            validate(body, CREATE_USER_SCHEMA)
+
+            return await self.do_handle(body)
+        except JSONValidationError as error:
+            return self.router_service.send_bad_request_response(self.name, error.message)
+
+    async def do_handle(self, user: dict):
+        try:
+            user_result = await self.user_service.create_user(user)
+
+            print(user_result)
+        except IntegrityError as error:
+            return self.router_service.send_bad_request_response(self.name, error.pgerror)
+
+        return self.router_service.send_success_response(self.name, 'OK')
