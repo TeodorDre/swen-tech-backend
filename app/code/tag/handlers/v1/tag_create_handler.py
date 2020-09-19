@@ -10,21 +10,8 @@ from app.code.tag.validation.tag import CREATE_TAG_SCHEMA
 from app.platform.router.router_service import RouterService
 from app.code.session.session_service import SessionService
 
-from app.db import tags, tags_lang
 from app.platform.database.database_service import DatabaseService
-
-'''
-# TAG_CREATE_STRUCT
-{
-  sessionId: string
-  slug: string
-  
-  translations: [ru, en, fr]
-
-}
-
-
-'''
+from psycopg2 import IntegrityError
 
 
 class TagCreateHandler(RouteHandler):
@@ -52,9 +39,21 @@ class TagCreateHandler(RouteHandler):
         try:
             validate(body, CREATE_TAG_SCHEMA)
 
-            return await self.do_handle(request, body, session_id)
+            return await self.do_handle(body, session_id)
         except JSONValidationError as error:
             return self.router_service.send_bad_request_response(self.name, error.message)
 
-    async def do_handle(self, request: web.Request, body: dict, session_id: str) -> web.Response:
+    async def do_handle(self, body: dict, session_id: str) -> web.Response:
+        session: dict = await self.session_service.get_user_session_by_id(session_id)
+
+        tag = body.copy()
+        tag['client_id'] = session['client_id']
+
+        try:
+            tag_result = await self.tag_service.create_tag(tag)
+
+            print(tag_result)
+        except IntegrityError as error:
+            return self.router_service.send_bad_request_response(self.name, error.pgerror)
+
         return send_success_response(self.name, 'OK')
