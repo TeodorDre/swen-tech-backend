@@ -1,13 +1,14 @@
 from app.platform.instantiation.disposable import Disposable
 from aiohttp import web
 from app.db import users, sessions
-from app.base.errors import AuthenticatedError, AuthErrorCode
+from app.base.errors import AuthenticatedError, AuthErrorCode, DBRecordNotFoundError
 from app.base.uuid import generate_id
+from app.platform.database.database_service import DatabaseService
 
 
 class SessionService(Disposable):
-    def __init__(self):
-        pass
+    def __init__(self, database_service: DatabaseService):
+        self.database_service = database_service
 
     async def get_user_by_email(self, request: web.Request, user_email: str):
         async with request.app['db'].acquire() as conn:
@@ -65,7 +66,15 @@ class SessionService(Disposable):
                     return session
 
     async def get_user_session_by_id(self, session_id: str):
-        pass
+        async with self.database_service.instance.acquire() as connection:
+            session = await connection.execute(
+                sessions.select().where(sessions.c.session_id == session_id)
+            )
+
+            if session.rowcount == 0:
+                raise DBRecordNotFoundError('Session with id ' + session_id + ' was not found.')
+
+            return dict(await session.fetchone())
 
     def transform_session(self, session, user):
         new_session = dict()

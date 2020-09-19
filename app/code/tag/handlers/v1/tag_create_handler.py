@@ -11,6 +11,7 @@ from app.platform.router.router_service import RouterService
 from app.code.session.session_service import SessionService
 
 from app.db import tags, tags_lang
+from app.platform.database.database_service import DatabaseService
 
 '''
 # TAG_CREATE_STRUCT
@@ -30,12 +31,13 @@ class TagCreateHandler(RouteHandler):
     path = '/tag'
 
     def __init__(self, log_service: LogService, tag_service: TagService, router_service: RouterService,
-                 session_service: SessionService):
+                 session_service: SessionService, database_service: DatabaseService):
         super().__init__(log_service)
 
         self.tag_service = tag_service
         self.router_service = router_service
         self.session_service = session_service
+        self.database_service = database_service
 
         self.path = TagCreateHandler.path
         self.request_type = hdrs.METH_POST
@@ -55,13 +57,4 @@ class TagCreateHandler(RouteHandler):
             return self.router_service.send_bad_request_response(self.name, error.message)
 
     async def do_handle(self, request: web.Request, body: dict, session_id: str) -> web.Response:
-        async with request.app['db'].acquire() as conn:
-            try:
-                result = await conn.execute(tags.insert().values(body))
-
-                print(result)
-
-                pass
-            except Exception as e:
-                pass
-            return send_success_response(self.name, 'OK')
+        return send_success_response(self.name, 'OK')

@@ -12,11 +12,13 @@ from app.platform.router.router_handler import RouteHandler
 
 from typing import List
 from app.platform.router.all_handlers import all_routes
+from app.platform.database.database_service import DatabaseService
 
 from app.platform.middleware.middleware_service import MiddlewareService
 from app.platform.middleware.middlewares.log_middleware_middleware import LogMiddleware
 from app.platform.middleware.middleware_handler import MiddlewareHandler
 from app.platform.middleware.middlewares.json_response_type_middleware import JSONResponseTypeMiddleware
+
 from app.code.middleware import all_middlewares
 
 
@@ -80,6 +82,11 @@ def create_app():
     # create db connection on startup, shutdown on exit
     app.on_startup.append(init_pg)
     app.on_cleanup.append(close_pg)
+
+    database_service: DatabaseService = instantiation_service.invoke_function(
+        lambda accessor: accessor.get('database_service'))
+
+    database_service.init(app)
 
     return app
 

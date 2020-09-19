@@ -1,16 +1,17 @@
 from app.platform.middleware.middleware_handler import MiddlewareHandler
 from aiohttp import web
 from app.base.errors import ValidationError, DBRecordNotFoundError
-from app.db import sessions
 
 from app.platform.router.router_service import RouterService
+from app.code.session.session_service import SessionService
 
 
 class SessionIdMiddleware(MiddlewareHandler):
-    def __init__(self, router_service: RouterService):
+    def __init__(self, router_service: RouterService, session_service: SessionService):
         super().__init__()
 
         self.router_service = router_service
+        self.session_service = session_service
 
         self.routes = [
             'client.session.info',
@@ -36,18 +37,9 @@ class SessionIdMiddleware(MiddlewareHandler):
         if 'sessionId' in body:
             session_id = body['sessionId']
 
-            if isinstance(session_id , str):
-                return await self.find_session(request, session_id )
+            if isinstance(session_id, str):
+                return await self.session_service.get_user_session_by_id(session_id)
 
             raise ValidationError('Field sessionId must be a string')
         else:
             raise ValidationError('Field sessionId is required')
-
-    async def find_session(self, request: web.Request, session_id: str):
-        async with request.app['db'].acquire() as connection:
-            session = await connection.execute(
-                sessions.select().where(sessions.c.session_id == session_id)
-            )
-
-            if session.rowcount == 0:
-                raise DBRecordNotFoundError('Session with id ' + session_id + ' was not found.')
