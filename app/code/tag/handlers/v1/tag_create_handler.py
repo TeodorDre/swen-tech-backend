@@ -8,6 +8,7 @@ from jsonschema import validate, ValidationError as JSONValidationError
 
 from app.code.tag.validation.tag import CREATE_TAG_SCHEMA
 from app.platform.router.router_service import RouterService
+from app.code.session.session_service import SessionService
 
 from app.db import tags, tags_lang
 
@@ -17,9 +18,7 @@ from app.db import tags, tags_lang
   sessionId: string
   slug: string
   
-  nameRu: string
-  nameEn: string
-  nameFr: string
+  translations: [ru, en, fr]
 
 }
 
@@ -30,11 +29,13 @@ from app.db import tags, tags_lang
 class TagCreateHandler(RouteHandler):
     path = '/tag'
 
-    def __init__(self, log_service: LogService, tag_service: TagService, router_service: RouterService):
+    def __init__(self, log_service: LogService, tag_service: TagService, router_service: RouterService,
+                 session_service: SessionService):
         super().__init__(log_service)
 
         self.tag_service = tag_service
         self.router_service = router_service
+        self.session_service = session_service
 
         self.path = TagCreateHandler.path
         self.request_type = hdrs.METH_POST
@@ -56,6 +57,10 @@ class TagCreateHandler(RouteHandler):
     async def do_handle(self, request: web.Request, body: dict, session_id: str) -> web.Response:
         async with request.app['db'].acquire() as conn:
             try:
+                result = await conn.execute(tags.insert().values(body))
+
+                print(result)
+
                 pass
             except Exception as e:
                 pass

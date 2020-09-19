@@ -7,7 +7,7 @@ CREATE_TAG_SCHEMA = {
         },
         "translations": {
             "type": "array",
-            "minItems": 1,
+            "minItems": 3,
             "items": {
                 "type": "string"
             }

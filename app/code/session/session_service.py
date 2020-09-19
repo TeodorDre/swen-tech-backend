@@ -64,6 +64,9 @@ class SessionService(Disposable):
 
                     return session
 
+    async def get_user_session_by_id(self, session_id: str):
+        pass
+
     def transform_session(self, session, user):
         new_session = dict()
         new_session['clientId'] = session['client_id']
