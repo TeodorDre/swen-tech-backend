@@ -16,7 +16,8 @@ class SessionIdMiddleware(MiddlewareHandler):
         self.routes = [
             'client.session.info',
             'client.session.logout',
-            'resources.tag.create'
+            'resources.tag.create',
+            'resources.tag.delete'
         ]
 
     async def call(self, request_name: str, request: web.Request, handler):

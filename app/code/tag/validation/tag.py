@@ -19,3 +19,16 @@ CREATE_TAG_SCHEMA = {
     ],
     "additionalProperties": False
 }
+
+DELETE_TAG_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "number",
+        },
+    },
+    "required": [
+        "id",
+    ],
+    "additionalProperties": False
+}
