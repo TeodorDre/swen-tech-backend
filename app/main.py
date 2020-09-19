@@ -10,6 +10,7 @@ from app.platform.middleware.middleware_service import MiddlewareService
 from app.code.session.session_service import SessionService
 from app.code.tag.tag_service import TagService
 from app.platform.database.database_service import DatabaseService
+from app.code.user.user_service import UserService
 
 __all__ = ['instantiation_service']
 
@@ -46,3 +47,7 @@ services.set('session_service', session_service)
 # tag service
 tag_service = TagService(database_service)
 services.set('tag_service', tag_service)
+
+# user service
+user_service = UserService(database_service)
+services.set('user_service', user_service)
