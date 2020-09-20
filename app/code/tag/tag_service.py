@@ -19,7 +19,7 @@ class TagService(Disposable):
 
             formatted_tag = {
                 'tag_slug': tag['slug'],
-                'created_by': tag['client_id']
+                'client_id': tag['client_id']
             }
 
             await conn.execute(tags.insert().values(formatted_tag))
@@ -28,7 +28,9 @@ class TagService(Disposable):
                 sql.select([sql.func.max(tags.c.tag_id).label('tag_id')])
             )
 
-            print(result)
+            tag = await result.fetchone()
+
+            return dict(tag)
 
     async def delete_tag(self, tag_id: int):
         async with self.database_service.instance.acquire() as conn:

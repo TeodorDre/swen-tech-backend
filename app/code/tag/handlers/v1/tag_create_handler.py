@@ -52,8 +52,6 @@ class TagCreateHandler(RouteHandler):
         try:
             tag_result = await self.tag_service.create_tag(tag)
 
-            print(tag_result)
+            return send_success_response(self.name, tag_result)
         except IntegrityError as error:
             return self.router_service.send_bad_request_response(self.name, error.pgerror)
-
-        return send_success_response(self.name, 'OK')

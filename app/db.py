@@ -70,12 +70,12 @@ tags = Table(
     Column('tag_id', Integer, primary_key=True, nullable=False),
     Column('tag_slug', TEXT, nullable=False, unique=True),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
+
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
     ForeignKeyConstraint(['client_id'], [users.c.client_id],
-                         name='created_by_client_id_fkey',
+                         name='client_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'tag_id', name='cl_tag_created'),
     schema='swentech'
 )
 
@@ -108,19 +108,16 @@ posts = Table(
     Column('post_category_id', Integer, nullable=False, unique=True),
     Column('post_tags_id', ARRAY(Integer), nullable=False, unique=True),
 
-    Column('created_by', Integer, nullable=False),
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
-    ForeignKeyConstraint(['created_by'], [users.c.client_id],
+    ForeignKeyConstraint(['client_id'], [users.c.client_id],
                          name='created_by_client_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='cl_post_created'),
 
     ForeignKeyConstraint(['post_category_id'], [categories.c.category_id],
                          name='post_category_id_category_id_fkey',
                          ondelete=None),
-    UniqueConstraint('client_id', 'created_by', name='post_category_id'),
     schema='swentech'
 )
 
