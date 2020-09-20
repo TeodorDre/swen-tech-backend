@@ -3,7 +3,7 @@ from app.platform.log.log_service import LogService
 from app.code.user.user_service import UserService
 
 from aiohttp import web, hdrs
-from ...validation.tag import CREATE_USER_SCHEMA
+from ...validation.user import CREATE_USER_SCHEMA
 from jsonschema import validate, ValidationError as JSONValidationError
 from psycopg2 import IntegrityError
 
@@ -40,8 +40,8 @@ class UserCreateHandler(RouteHandler):
         try:
             user_result = await self.user_service.create_user(user)
 
-            print(user_result)
+            return self.router_service.send_success_response(self.name, user_result)
         except IntegrityError as error:
             return self.router_service.send_bad_request_response(self.name, error.pgerror)
-
-        return self.router_service.send_success_response(self.name, 'OK')
+        except Exception:
+            return self.router_service.send_unexpected_error_response(self.name)

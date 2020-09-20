@@ -20,3 +20,17 @@ CREATE_USER_SCHEMA = {
     ],
     "additionalProperties": False
 }
+
+
+DELETE_USER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "number",
+        },
+    },
+    "required": [
+        "id",
+    ],
+    "additionalProperties": False
+}
