@@ -13,6 +13,7 @@ from app.platform.database.database_service import DatabaseService
 from app.code.user.user_service import UserService
 
 from app.code.category.category_service import CategoryService
+from app.code.post.post_service import PostService
 
 __all__ = ['instantiation_service']
 
@@ -53,6 +54,10 @@ services.set('tag_service', tag_service)
 # category service
 category_service = CategoryService(database_service)
 services.set('category_service', category_service)
+
+# post service
+post_service = PostService(database_service)
+services.set('post_service', post_service)
 
 # user service
 user_service = UserService(database_service)
