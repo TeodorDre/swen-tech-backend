@@ -15,7 +15,7 @@ class VariableRouteHandler(RouteHandler):
 
         self.name = 'common.variable'
 
-    def handler(self, request: web.Request) -> web.Response:
+    async def handler(self, request: web.Request) -> web.Response:
         result = f"Path: '{request.match_info['name']}' does't available"
 
         return send_not_found_response(self.name, result)

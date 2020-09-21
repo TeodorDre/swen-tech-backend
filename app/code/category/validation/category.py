@@ -1,4 +1,4 @@
-CREATE_TAG_SCHEMA = {
+CREATE_CATEGORY_SCHEMA = {
     "type": "object",
     "properties": {
         "slug": {
@@ -20,7 +20,7 @@ CREATE_TAG_SCHEMA = {
     "additionalProperties": False
 }
 
-DELETE_TAG_SCHEMA = {
+DELETE_CATEGORY_SCHEMA = {
     "type": "object",
     "properties": {
         "id": {

@@ -29,8 +29,8 @@ class RouterService(Disposable):
     def send_not_found_response(self, request_name: str, error_message: str):
         return send_not_found_response(request_name, error_message)
 
-    def send_unexpected_error_response(self, request_name: str):
-        return send_unexpected_error_response(request_name)
+    def send_unexpected_error_response(self, request_name: str, additional_text: str = ''):
+        return send_unexpected_error_response(request_name, additional_text)
 
     def send_bad_request_response(self, request_name: str, error_message: str):
         return send_bad_request_response(request_name, error_message)

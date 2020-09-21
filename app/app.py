@@ -22,10 +22,13 @@ from app.platform.middleware.middlewares.json_response_type_middleware import JS
 from app.code.middleware import all_middlewares
 
 
-def middleware_factory(middleware):
+def middleware_factory(middleware, router_service: RouterService):
     @web.middleware
-    async def middleware_call(request, handler):
+    async def middleware_call(request: web.Request, handler):
         request_name = request.match_info.route.name
+
+        if not request_name:
+            return router_service.send_not_found_response(request.path, 'Request not found.')
 
         return await middleware(request_name, request, handler)
 
@@ -56,7 +59,8 @@ def create_app():
         if issubclass(middleware, MiddlewareHandler):
             middleware_service.register_middleware(middleware)
 
-    middlewares = map(lambda middleware_item: middleware_factory(middleware_item.call), middleware_service.middlewares)
+    middlewares = map(lambda middleware_item: middleware_factory(middleware_item.call, router_service),
+                      middleware_service.middlewares)
 
     # create application
     app = web.Application(middlewares=middlewares)

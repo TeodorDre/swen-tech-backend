@@ -9,46 +9,48 @@ class CategoryService(Disposable):
     def __init__(self, database_service: DatabaseService):
         self.database_service = database_service
 
-    async def create_category(self, tag: dict):
+    async def create_category(self, category: dict):
         async with self.database_service.instance.acquire() as conn:
-            translations: list = tag.get('translations')
+            translations: list = categories.get('translations')
 
             ru_translation = translations[0]
             en_translation = translations[1]
             fr_translation = translations[2]
 
-            formatted_tag = {
-                'tag_slug': tag['slug'],
-                'client_id': tag['client_id']
+            print(category)
+
+            formatted_category = {
+                'category_slug': category['slug'],
+                'client_id': category['client_id']
             }
 
-            await conn.execute(tags.insert().values(formatted_tag))
+            await conn.execute(categories.insert().values(formatted_category))
 
             result = await conn.execute(
-                sql.select([sql.func.max(tags.c.tag_id).label('tag_id')])
+                sql.select([sql.func.max(categories.c.category_id).label('category_id')])
             )
 
-            tag = await result.fetchone()
-            formatted_tag: dict = dict(tag)
-            tag_id = formatted_tag.get('tag_id')
+            category = await result.fetchone()
+            formatted_category: dict = dict(category)
+            category_id = formatted_category.get('category_id')
 
-            tag_translation = {
+            category_translation = {
                 'name_ru': ru_translation,
                 'name_en': en_translation,
                 'name_fr': fr_translation,
-                'tag_id': tag_id
+                'category_id': category_id
             }
 
-            await conn.execute(tags_lang.insert().values(tag_translation))
+            await conn.execute(categories_lang.insert().values(category_translation))
 
-            return formatted_tag
+            return formatted_category
 
-    async def delete_category(self, tag_id: int):
+    async def delete_category(self, category_id: int):
         async with self.database_service.instance.acquire() as conn:
-            result = await conn.execute(tags.delete().where(tags.c.tag_id == tag_id))
+            result = await conn.execute(categories.delete().where(categories.c.category_id == category_id))
 
             if result.rowcount == 0:
-                raise DBRecordNotFoundError('Tag with id ' + str(tag_id) + ' was not found.')
+                raise DBRecordNotFoundError('Tag with id ' + str(category_id) + ' was not found.')
 
     async def update_category(self):
         pass

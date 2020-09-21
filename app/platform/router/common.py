@@ -32,9 +32,9 @@ def send_bad_request_response(request_name: str, error_message: str = 'Bad reque
     })
 
 
-def send_unexpected_error_response(request_name: str) -> web.Response:
+def send_unexpected_error_response(request_name: str, additional_text: str = '') -> web.Response:
     return web.json_response({
         'request': request_name,
         'errorCode': 25,
-        'errorMessage': 'Unexpected error.'
+        'errorMessage': 'Unexpected error. ' + additional_text
     }, status=HTTPStatusCode.OK.value[0])

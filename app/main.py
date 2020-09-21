@@ -12,6 +12,8 @@ from app.code.tag.tag_service import TagService
 from app.platform.database.database_service import DatabaseService
 from app.code.user.user_service import UserService
 
+from app.code.category.category_service import CategoryService
+
 __all__ = ['instantiation_service']
 
 # Создаем коллекцию сервисов
@@ -47,6 +49,10 @@ services.set('session_service', session_service)
 # tag service
 tag_service = TagService(database_service)
 services.set('tag_service', tag_service)
+
+# category service
+category_service = CategoryService(database_service)
+services.set('category_service', category_service)
 
 # user service
 user_service = UserService(database_service)
