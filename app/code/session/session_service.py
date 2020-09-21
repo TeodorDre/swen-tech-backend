@@ -17,10 +17,9 @@ class SessionService(Disposable):
             if result.rowcount == 0:
                 return None
 
-            for user in result:
-                user = dict(user)
+            user = await result.fetchone()
 
-                return user
+            return dict(user)
 
     async def login_user(self, request: web.Request, user: dict):
         body = await request.json()
@@ -75,6 +74,13 @@ class SessionService(Disposable):
                 raise DBRecordNotFoundError('Session with id ' + session_id + ' was not found.')
 
             return dict(await session.fetchone())
+
+    async def delete_session_by_id(self, session_id: str):
+        async with self.database_service.instance.acquire() as connection:
+            result = await connection.execute(sessions.delete().where(sessions.c.session_id == session_id))
+
+            if result.rowcount == 0:
+                raise DBRecordNotFoundError('Session with id ' + session_id + ' was not found.')
 
     def transform_session(self, session, user):
         new_session = dict()
