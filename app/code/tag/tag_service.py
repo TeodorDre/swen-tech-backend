@@ -29,8 +29,19 @@ class TagService(Disposable):
             )
 
             tag = await result.fetchone()
+            formatted_tag: dict = dict(tag)
+            tag_id = formatted_tag.get('tag_id')
 
-            return dict(tag)
+            tag_translation = {
+                'name_ru': ru_translation,
+                'name_en': en_translation,
+                'name_fr': fr_translation,
+                'tag_id': tag_id
+            }
+
+            await conn.execute(tags_lang.insert().values(tag_translation))
+
+            return formatted_tag
 
     async def delete_tag(self, tag_id: int):
         async with self.database_service.instance.acquire() as conn:
