@@ -11,13 +11,11 @@ class CategoryService(Disposable):
 
     async def create_category(self, category: dict):
         async with self.database_service.instance.acquire() as conn:
-            translations: list = categories.get('translations')
+            translations: list = category.get('translations')
 
             ru_translation = translations[0]
             en_translation = translations[1]
             fr_translation = translations[2]
-
-            print(category)
 
             formatted_category = {
                 'category_slug': category['slug'],
