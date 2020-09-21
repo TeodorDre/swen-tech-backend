@@ -1,8 +1,6 @@
 from app.platform.router.router_handler import RouteHandler
 from app.platform.log.log_service import LogService
 from aiohttp import web, hdrs
-
-from app.platform.router.common import send_success_response
 from psycopg2 import IntegrityError
 from app.base.errors import DBRecordNotFoundError
 
@@ -43,9 +41,9 @@ class UserDeleteHandler(RouteHandler):
 
         try:
             await self.user_service.delete_user_by_id(client_id)
+
+            return self.router_service.send_success_response(self.name, 'OK')
         except IntegrityError as error:
             return self.router_service.send_bad_request_response(self.name, error.pgerror)
         except DBRecordNotFoundError as error:
             return self.router_service.send_not_found_response(self.name, error.message)
-
-        return send_success_response(self.name, 'OK')

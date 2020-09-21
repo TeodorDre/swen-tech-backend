@@ -69,8 +69,8 @@ tags = Table(
     Column('client_id', Integer, nullable=False),
     Column('tag_id', Integer, primary_key=True, nullable=False),
     Column('tag_slug', TEXT, nullable=False, unique=True),
-    Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
+    Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
     ForeignKeyConstraint(['client_id'], [users.c.client_id],
