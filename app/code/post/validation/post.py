@@ -5,10 +5,29 @@ CREATE_POST_SCHEMA = {
             "type": "string",
             "minLength": 2
         },
+        "url": {
+            "type": "string",
+            "minLength": 3,
+        },
+        "poster": {
+            "type": "string",
+            "minLength": 10,
+        },
+        "category": {
+            "type": "number",
+        },
+        "tags": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "number"
+            }
+        }
     },
     "required": [
         "slug",
-        "translations",
+        "url",
+        "category"
     ],
     "additionalProperties": False
 }

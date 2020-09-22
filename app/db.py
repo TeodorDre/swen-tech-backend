@@ -102,7 +102,6 @@ posts = Table(
     Column('post_id', Integer, primary_key=True, nullable=False),
     Column('post_slug', TEXT, nullable=False, unique=True),
     Column('post_url', TEXT, nullable=False, unique=True),
-
     Column('post_featured_image', TEXT, nullable=False, unique=False),
     Column('post_status', Integer, nullable=False, unique=True),
     Column('post_category_id', Integer, nullable=False, unique=True),
