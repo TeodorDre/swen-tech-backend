@@ -18,7 +18,9 @@ class SessionIdMiddleware(MiddlewareHandler):
             'client.session.logout',
             'resources.tag.create',
             'resources.tag.delete',
-            'resources.user.delete'
+            'resources.user.delete',
+            'resources.post.create',
+            'resources.post.delete'
         ]
 
     async def call(self, request_name: str, request: web.Request, handler):
