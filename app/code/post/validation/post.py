@@ -1,17 +1,17 @@
 CREATE_POST_SCHEMA = {
     "type": "object",
     "properties": {
-        "slug": {
+        "title": {
             "type": "string",
             "minLength": 2
-        },
-        "url": {
-            "type": "string",
-            "minLength": 3,
         },
         "poster": {
             "type": "string",
             "minLength": 10,
+        },
+        "posterAltText": {
+          "type:": "string",
+          "minLength": 5,
         },
         "category": {
             "type": "number",
@@ -25,8 +25,7 @@ CREATE_POST_SCHEMA = {
         }
     },
     "required": [
-        "slug",
-        "url",
+        "title",
         "category"
     ],
     "additionalProperties": False
