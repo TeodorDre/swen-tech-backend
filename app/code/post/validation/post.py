@@ -2,11 +2,18 @@ CREATE_POST_SCHEMA = {
     "type": "object",
     "properties": {
         "title": {
-            "type": "string",
-            "minLength": 2
+            "type": "array",
+            "minItems": 3,
+            "items": {
+                "type": "string"
+            }
         },
         "body": {
-            "type": "string",
+            "type": "array",
+            "minItems": 3,
+            "items": {
+                "type": "string"
+            }
         },
         "poster": {
             "type": "string",
