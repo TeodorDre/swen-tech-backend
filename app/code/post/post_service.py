@@ -10,6 +10,8 @@ class PostService(Disposable):
         self.database_service = database_service
 
     async def create_post(self, post: dict):
+        print(post)
+
         pass
 
     async def delete_post(self):

@@ -5,6 +5,9 @@ CREATE_POST_SCHEMA = {
             "type": "string",
             "minLength": 2
         },
+        "body": {
+            "type": "string",
+        },
         "poster": {
             "type": "string",
             "minLength": 10,
@@ -26,7 +29,8 @@ CREATE_POST_SCHEMA = {
     },
     "required": [
         "title",
-        "category"
+        "category",
+        "body",
     ],
     "additionalProperties": False
 }
