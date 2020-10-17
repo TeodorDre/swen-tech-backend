@@ -23,13 +23,13 @@ class PostService(Disposable):
             if post_result.rowcount == 0:
                 raise DBRecordNotFoundError('Post with slug ' + slug + ' was not found')
 
-            return await self.do_get_post_by_slug(post_result)
+            return await self.do_get_post(post_result)
 
-    async def do_get_post_by_slug(self, post_result):
+    async def do_get_post(self, post_result):
         for post in post_result:
             post = dict(post)
 
-            print(post)
+            category_id = post.get('category_id')
 
     async def create_post(self, post: dict):
         async with self.database_service.instance.acquire() as conn:
