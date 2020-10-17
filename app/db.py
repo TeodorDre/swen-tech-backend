@@ -99,6 +99,8 @@ tags_lang = Table(
 posts = Table(
     'posts', meta,
     Column('client_id', Integer, nullable=False),
+    Column('category_id', Integer, nullable=False),
+
     Column('post_id', Integer, primary_key=True, nullable=False),
     Column('post_slug', TEXT, nullable=False, unique=True),
 
@@ -106,7 +108,6 @@ posts = Table(
     Column('post_featured_image', TEXT, nullable=False, unique=False),
     Column('post_status', Integer, nullable=False, unique=True),
 
-    Column('post_category_id', Integer, nullable=False, unique=True),
     Column('post_tags_id', ARRAY(Integer), nullable=False, unique=True),
 
     Column('created_ts', TIMESTAMP, server_default=func.now(), nullable=False),
@@ -116,8 +117,8 @@ posts = Table(
                          name='client_id_fkey',
                          ondelete=None),
 
-    ForeignKeyConstraint(['post_category_id'], [categories.c.category_id],
-                         name='post_category_id_fkey',
+    ForeignKeyConstraint(['category_id'], [categories.c.category_id],
+                         name='category_id_fkey',
                          ondelete=None),
     schema='swentech'
 )

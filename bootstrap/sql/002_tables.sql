@@ -78,7 +78,7 @@ CREATE TABLE if not exists swentech.tags_lang (
 
 CREATE TABLE if not exists swentech.posts (
   client_id               SERIAL           NOT NULL REFERENCES swentech.users,
-  category_id             SERIAL           NOT NULL unique references swentech.categories,
+  category_id             SERIAL           NOT NULL REFERENCES swentech.categories,
 
   post_id                 SERIAL           PRIMARY KEY not null unique,
   post_slug               TEXT             NOT NULL unique,
@@ -86,7 +86,6 @@ CREATE TABLE if not exists swentech.posts (
 
   post_featured_image     TEXT             NOT NULL unique,
   post_status             SERIAL           NOT NULL unique,
-  post_category_id        SERIAL           NOT NULL,
   post_tags_id            NUMERIC[]        NOT NULL unique,
 
   created_ts              TIMESTAMPTZ      NOT NULL default now(),
@@ -94,7 +93,7 @@ CREATE TABLE if not exists swentech.posts (
 );
 
 CREATE TABLE if not exists swentech.posts_lang (
-  post_id          SERIAL      not null unique references swentech.posts ON DELETE CASCADE,
+  post_id          SERIAL      NOT NULL UNIQUE REFERENCES  swentech.posts ON DELETE CASCADE,
 
   post_lang_id     SERIAL      PRIMARY KEY NOT NULL unique,
 

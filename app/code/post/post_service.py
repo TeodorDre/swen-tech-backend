@@ -44,7 +44,7 @@ class PostService(Disposable):
                 'post_featured_image': poster,
                 'post_status': 1,
                 'post_tags_id': tags,
-                'post_category_id': post_category_id,
+                'category_id': post_category_id,
             }
 
             await conn.execute(posts.insert().values(formatted_post))
