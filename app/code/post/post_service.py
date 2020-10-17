@@ -16,23 +16,70 @@ class PostService(Disposable):
 
     async def create_post(self, post: dict):
         async with self.database_service.instance.acquire() as conn:
-            url = post.get('title')
+            title: list = post.get('title')
+            texts: list = post.get('body')
+
+            ru_title = title[0]
+            en_title = title[1]
+            fr_title = title[2]
+
+            ru_text = texts[0]
+            en_text = texts[1]
+            fr_text = texts[2]
+
+            slug = post.get('slug')
+            poster = post.get('poster')
 
             tags: list = post.get('tags')
 
+            if not tags:
+                tags = []
+
+            post_category_id = post.get('category')
+
             formatted_post = {
                 'client_id': post.get('client_id'),
-                'post_slug': post.get('slug'),
-                'post_url': url,
-                'post_featured_image': post.get('poster'),
-                'post_status': PostPublishedStatus.NotPublished.value[0],
+                'post_slug': slug,
+                'post_url': slug,
+                'post_featured_image': poster,
+                'post_status': 1,
                 'post_tags_id': tags,
+                'post_category_id': post_category_id,
             }
 
-            # await conn.execute(posts.insert().values(formatted_post))
+            await conn.execute(posts.insert().values(formatted_post))
 
-    async def delete_post(self):
-        pass
+            result = await conn.execute(
+                sql.select([sql.func.max(posts.c.post_id).label('post_id')])
+            )
+
+            post = await result.fetchone()
+            formatted_post: dict = dict(post)
+
+            post_id = formatted_post.get('post_id')
+
+            post_translation = {
+                'post_id': post_id,
+
+                'text_ru': ru_text,
+                'text_en': en_text,
+                'text_fr': fr_text,
+
+                'title_ru': ru_title,
+                'title_en': en_title,
+                'title_fr': fr_title
+            }
+
+            await conn.execute(posts_lang.insert().values(post_translation))
+
+            return formatted_post
+
+    async def delete_post(self, post_id: int):
+        async with self.database_service.instance.acquire() as conn:
+            result = await conn.execute(posts.delete().where(posts.c.post_id == post_id))
+
+            if result.rowcount == 0:
+                raise DBRecordNotFoundError('Tag with id ' + str(post_id) + ' was not found.')
 
     async def update_post(self):
         pass

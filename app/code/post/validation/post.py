@@ -8,6 +8,10 @@ CREATE_POST_SCHEMA = {
                 "type": "string"
             }
         },
+        "slug": {
+            "type": "string",
+            "minLength": 3,
+        },
         "body": {
             "type": "array",
             "minItems": 3,
@@ -17,7 +21,6 @@ CREATE_POST_SCHEMA = {
         },
         "poster": {
             "type": "string",
-            "minLength": 10,
         },
         "posterAltText": {
           "type:": "string",
@@ -38,6 +41,7 @@ CREATE_POST_SCHEMA = {
         "title",
         "category",
         "body",
+        "slug",
     ],
     "additionalProperties": False
 }

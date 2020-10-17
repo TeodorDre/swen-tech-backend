@@ -101,9 +101,11 @@ posts = Table(
     Column('client_id', Integer, nullable=False),
     Column('post_id', Integer, primary_key=True, nullable=False),
     Column('post_slug', TEXT, nullable=False, unique=True),
+
     Column('post_url', TEXT, nullable=False, unique=True),
     Column('post_featured_image', TEXT, nullable=False, unique=False),
     Column('post_status', Integer, nullable=False, unique=True),
+
     Column('post_category_id', Integer, nullable=False, unique=True),
     Column('post_tags_id', ARRAY(Integer), nullable=False, unique=True),
 
@@ -111,11 +113,11 @@ posts = Table(
     Column('updated_ts', TIMESTAMP, server_default=func.now(), nullable=False),
 
     ForeignKeyConstraint(['client_id'], [users.c.client_id],
-                         name='created_by_client_id_fkey',
+                         name='client_id_fkey',
                          ondelete=None),
 
     ForeignKeyConstraint(['post_category_id'], [categories.c.category_id],
-                         name='post_category_id_category_id_fkey',
+                         name='post_category_id_fkey',
                          ondelete=None),
     schema='swentech'
 )

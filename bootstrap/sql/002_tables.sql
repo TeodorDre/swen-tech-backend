@@ -84,10 +84,10 @@ CREATE TABLE if not exists swentech.posts (
   post_slug               TEXT             NOT NULL unique,
   post_url                TEXT             NOT NULL unique,
 
-  post_featured_image     SERIAL           NOT NULL unique,
-  post_status             TEXT             NOT NULL unique,
+  post_featured_image     TEXT             NOT NULL unique,
+  post_status             SERIAL           NOT NULL unique,
   post_category_id        SERIAL           NOT NULL,
-  post_tags_id            TEXT[]           NOT NULL unique,
+  post_tags_id            NUMERIC[]        NOT NULL unique,
 
   created_ts              TIMESTAMPTZ      NOT NULL default now(),
   updated_ts              TIMESTAMPTZ      NOT NULL default now()
