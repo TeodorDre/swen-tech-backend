@@ -14,6 +14,23 @@ class PostService(Disposable):
     def __init__(self, database_service: DatabaseService):
         self.database_service = database_service
 
+    async def get_post_by_slug(self, slug: str):
+        async with self.database_service.instance.acquire() as connection:
+            post_result = await connection.execute(
+                posts.select().where(posts.c.post_slug == slug)
+            )
+
+            if post_result.rowcount == 0:
+                raise DBRecordNotFoundError('Post with slug ' + slug + ' was not found')
+
+            return await self.do_get_post_by_slug(post_result)
+
+    async def do_get_post_by_slug(self, post_result):
+        for post in post_result:
+            post = dict(post)
+
+            print(post)
+
     async def create_post(self, post: dict):
         async with self.database_service.instance.acquire() as conn:
             title: list = post.get('title')
