@@ -4,6 +4,7 @@ from app.db import posts, posts_lang
 from sqlalchemy import sql
 from app.base.errors import DBRecordNotFoundError
 from enum import Enum
+from app.code.category.category_service import CategoryService
 
 
 class PostPublishedStatus(Enum):
@@ -11,8 +12,9 @@ class PostPublishedStatus(Enum):
 
 
 class PostService(Disposable):
-    def __init__(self, database_service: DatabaseService):
+    def __init__(self, database_service: DatabaseService, category_service: CategoryService):
         self.database_service = database_service
+        self.category_service = category_service
 
     async def get_post_by_slug(self, slug: str):
         async with self.database_service.instance.acquire() as connection:
@@ -30,6 +32,10 @@ class PostService(Disposable):
             post = dict(post)
 
             category_id = post.get('category_id')
+
+            category = await self.category_service.get_category_by_id(category_id)
+
+            print(category)
 
     async def create_post(self, post: dict):
         async with self.database_service.instance.acquire() as conn:

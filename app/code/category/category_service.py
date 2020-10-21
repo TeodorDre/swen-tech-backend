@@ -9,6 +9,27 @@ class CategoryService(Disposable):
     def __init__(self, database_service: DatabaseService):
         self.database_service = database_service
 
+    async def get_category_by_id(self, category_id: int):
+        async with self.database_service.instance.acquire() as conn:
+            category_result = await conn.execute(categories.select().where(categories.c.category_id == category_id))
+
+            if category_result.rowcount == 0:
+                return None
+
+            for category in category_result:
+                category = dict(category)
+
+                category_lang_result = await conn.execute(
+                    categories_lang.select().where(categories_lang.c.category_id == category_id))
+
+                for category_lang in category_lang_result:
+                    category_lang = dict(category_lang)
+
+                    return {
+                        'lang': category_lang,
+                        'data': category,
+                    }
+
     async def create_category(self, category: dict):
         async with self.database_service.instance.acquire() as conn:
             translations: list = category.get('translations')

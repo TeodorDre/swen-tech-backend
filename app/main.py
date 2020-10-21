@@ -56,7 +56,7 @@ category_service = CategoryService(database_service)
 services.set('category_service', category_service)
 
 # post service
-post_service = PostService(database_service)
+post_service = PostService(database_service, category_service)
 services.set('post_service', post_service)
 
 # user service
