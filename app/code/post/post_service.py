@@ -16,7 +16,7 @@ class PostService(Disposable):
         self.database_service = database_service
         self.category_service = category_service
 
-    async def get_post_by_slug(self, slug: str):
+    async def get_post_by_slug(self, slug: str, lang: str):
         async with self.database_service.instance.acquire() as connection:
             post_result = await connection.execute(
                 posts.select().where(posts.c.post_slug == slug)
@@ -25,17 +25,67 @@ class PostService(Disposable):
             if post_result.rowcount == 0:
                 raise DBRecordNotFoundError('Post with slug ' + slug + ' was not found')
 
-            return await self.do_get_post(post_result)
+            return await self.do_get_post(post_result, lang)
 
-    async def do_get_post(self, post_result):
+    async def do_get_post(self, post_result, lang: str):
         for post in post_result:
             post = dict(post)
 
             category_id = post.get('category_id')
 
             category = await self.category_service.get_category_by_id(category_id)
+            category_lang = category.get('lang')
+            category_data = category.get('data')
 
-            print(category)
+            category_name: str = ''
+            category_id: int = category_data.get('category_id')
+            category_slug: str = category_data.get('category_slug')
+
+            if lang == 'ru':
+                category_name = category_lang.get('name_ru')
+            elif lang == 'en':
+                category_name = category_lang.get('name_en')
+            elif lang == 'fr':
+                category_name = category_lang.get('name_fr')
+
+            formatted_category = {
+                'id': category_id,
+                'slug': category_slug,
+                'name': category_name
+            }
+
+            post_id = post.get('post_id')
+
+            post_title: str = ''
+            post_body: str = ''
+            post_slug = post.get('post_slug')
+
+            async with self.database_service.instance.acquire() as connection:
+                post_lang_result = await connection.execute(
+                    posts_lang.select().where(posts_lang.c.post_id == post_id))
+
+                for post_lang in post_lang_result:
+                    post_lang = dict(post_lang)
+
+                    if lang == 'ru':
+                        post_title = post_lang.get('title_ru')
+                        post_body = post_lang.get('text_ru')
+                    elif lang == 'en':
+                        post_title = post_lang.get('title_en')
+                        post_body = post_lang.get('text_en')
+                    elif lang == 'fr':
+                        post_title = post_lang.get('title_fr')
+                        post_body = post_lang.get('text_fr')
+
+            result = {
+                'author': 'teodor_dre',
+                'title': post_title,
+                'body': post_body,
+                'category': formatted_category,
+                'slug': post_slug
+            }
+
+            return result
 
     async def create_post(self, post: dict):
         async with self.database_service.instance.acquire() as conn:

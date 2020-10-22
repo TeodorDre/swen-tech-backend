@@ -25,8 +25,10 @@ class PostGetBySlugHandler(RouteHandler):
     async def handler(self, request: web.Request) -> web.Response:
         post_slug: str = request.match_info['slug']
 
+        lang = request.get('lang')
+
         try:
-            post = await self.post_service.get_post_by_slug(post_slug)
+            post = await self.post_service.get_post_by_slug(post_slug, lang)
 
             return self.router_service.send_success_response(self.name, post)
         except DBRecordNotFoundError as error:

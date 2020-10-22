@@ -18,6 +18,7 @@ from app.platform.middleware.middleware_service import MiddlewareService
 from app.platform.middleware.middlewares.log_middleware_middleware import LogMiddleware
 from app.platform.middleware.middleware_handler import MiddlewareHandler
 from app.platform.middleware.middlewares.json_response_type_middleware import JSONResponseTypeMiddleware
+from app.platform.middleware.middlewares.lang_required_middleware import LangRequiredMiddleware
 
 from app.code.middleware import all_middlewares
 
@@ -54,6 +55,7 @@ def create_app():
 
     middleware_service.register_middleware(LogMiddleware)
     middleware_service.register_middleware(JSONResponseTypeMiddleware)
+    middleware_service.register_middleware(LangRequiredMiddleware)
 
     for middleware in all_middlewares:
         if issubclass(middleware, MiddlewareHandler):
