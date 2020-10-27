@@ -20,5 +20,13 @@ class PostGetAllHandler(RouteHandler):
 
         self.name = 'resources.post.get_all'
 
-    def handler(self, request: web.Request) -> web.Response:
-        return self.router_service.send_success_response(self.name, 'OK')
+    async def handler(self, request: web.Request) -> web.Response:
+        lang = request.get('lang')
+
+        try:
+            posts = await self.post_service.get_all(lang)
+
+            return self.router_service.send_success_response(self.name, posts)
+        except Exception as error:
+            return self.router_service.send_unexpected_error_response(self.name, error)
+

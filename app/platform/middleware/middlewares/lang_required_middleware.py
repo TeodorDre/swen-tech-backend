@@ -10,7 +10,8 @@ class LangRequiredMiddleware(MiddlewareHandler):
         self.router_service = router_service
 
         self.routes = [
-            'resources.post.get_by_slug'
+            'resources.post.get_by_slug',
+            'resources.post.get_all'
         ]
 
     async def call(self, request_name: str, request: web.Request, handler):

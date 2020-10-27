@@ -16,7 +16,20 @@ class PostService(Disposable):
         self.database_service = database_service
         self.category_service = category_service
 
-    async def get_post_by_slug(self, slug: str, lang: str):
+    async def get_all(self, lang: str):
+        all_posts = []
+
+        async with self.database_service.instance.acquire() as connection:
+            posts_result = await connection.execute(posts.select())
+
+            for post in posts_result:
+                post_res = await self.do_get_post([post], lang)
+
+                all_posts.append(post_res)
+
+        return all_posts
+
+    async def get_by_slug(self, slug: str, lang: str):
         async with self.database_service.instance.acquire() as connection:
             post_result = await connection.execute(
                 posts.select().where(posts.c.post_slug == slug)
