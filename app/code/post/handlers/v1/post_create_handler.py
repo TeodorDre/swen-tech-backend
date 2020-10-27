@@ -14,7 +14,7 @@ from app.code.post.post_service import PostService
 
 
 class PostCreateHandler(RouteHandler):
-    path = '/post'
+    path = '/post/'
 
     def __init__(self, log_service: LogService, router_service: RouterService, session_service: SessionService,
                  database_service: DatabaseService, post_service: PostService):

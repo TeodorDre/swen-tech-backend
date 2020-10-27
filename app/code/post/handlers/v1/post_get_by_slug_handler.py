@@ -9,7 +9,7 @@ from app.code.post.post_service import PostService
 
 
 class PostGetBySlugHandler(RouteHandler):
-    path = '/post/{slug}'
+    path = '/post/{slug}/'
 
     def __init__(self, log_service: LogService, router_service: RouterService, post_service: PostService):
         super().__init__(log_service)
