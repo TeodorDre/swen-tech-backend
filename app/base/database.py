@@ -2,8 +2,7 @@ from aiopg.sa import create_engine
 
 
 async def init_pg(app):
-    # conf = app['config']['postgres']
-    conf = app['config']
+    conf = app['config']['postgres']
     engine = await create_engine(
         database=conf['database'],
         user=conf['user'],
