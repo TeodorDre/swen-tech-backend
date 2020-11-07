@@ -12,7 +12,7 @@ from app.base.errors import DBRecordNotFoundError
 
 
 class TagDeleteHandler(RouteHandler):
-    path = '/tag'
+    path = '/tag/'
 
     def __init__(self, log_service: LogService, router_service: RouterService, tag_service: TagService):
         super().__init__(log_service)

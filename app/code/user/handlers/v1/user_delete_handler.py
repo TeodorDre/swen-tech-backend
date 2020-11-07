@@ -11,7 +11,7 @@ from app.code.user.user_service import UserService
 
 
 class UserDeleteHandler(RouteHandler):
-    path = '/user'
+    path = '/user/'
 
     def __init__(self, log_service: LogService, router_service: RouterService, user_service: UserService):
         super().__init__(log_service)

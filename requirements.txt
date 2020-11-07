@@ -1,5 +1,5 @@
 aiobotocore==0.9.4
-aiohttp==3.4.4
+aiohttp==3.5.4
 aiopg==0.15.0
 async-timeout==3.0.0
 attrs==18.2.0
@@ -20,4 +20,5 @@ wrapt==1.10.11
 yarl==1.2.6
 jsonify==0.5
 aiohttp_cors==0.7.0
+aiohttp-middlewares==1.1.0
 mimesis==4.1.1

@@ -5,7 +5,7 @@ from app.platform.router.common import send_success_response
 
 
 class UserGetAllHandler(RouteHandler):
-    path = '/user'
+    path = '/user/'
 
     def __init__(self, log_service: LogService):
         super().__init__(log_service)

@@ -15,7 +15,7 @@ from psycopg2 import IntegrityError
 
 
 class TagCreateHandler(RouteHandler):
-    path = '/tag'
+    path = '/tag/'
 
     def __init__(self, log_service: LogService, tag_service: TagService, router_service: RouterService,
                  session_service: SessionService, database_service: DatabaseService):

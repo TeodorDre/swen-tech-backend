@@ -14,7 +14,7 @@ from psycopg2 import IntegrityError
 
 
 class CategoryCreateHandler(RouteHandler):
-    path = '/category'
+    path = '/category/'
 
     def __init__(self, log_service: LogService, category_service: CategoryService, router_service: RouterService,
                  session_service: SessionService, database_service: DatabaseService):

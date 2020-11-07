@@ -9,7 +9,7 @@ from app.platform.router.router_service import RouterService
 
 
 class SessionInfoHandler(RouteHandler):
-    path = '/session/info'
+    path = '/session/info/'
 
     def __init__(self, log_service: LogService, session_service: SessionService, router_service: RouterService):
         super().__init__(log_service)

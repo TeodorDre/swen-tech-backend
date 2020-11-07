@@ -8,7 +8,7 @@ from app.platform.router.router_service import RouterService
 
 
 class SessionLogoutHandler(RouteHandler):
-    path = '/session/logout'
+    path = '/session/logout/'
 
     def __init__(self, log_service: LogService, session_service: SessionService, router_service: RouterService):
         super().__init__(log_service)

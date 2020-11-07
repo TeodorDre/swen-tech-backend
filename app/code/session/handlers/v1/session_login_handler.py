@@ -7,7 +7,7 @@ from app.base.errors import AuthenticatedError, AuthErrorCode
 
 
 class SessionLoginHandler(RouteHandler):
-    path = '/session/login'
+    path = '/session/login/'
 
     def __init__(self, log_service: LogService, router_service: RouterService, session_service: SessionService):
         super().__init__(log_service)

@@ -2,7 +2,6 @@ from aiohttp import web
 from app.base.database import init_pg, close_pg
 from configuration import DB_CONFIG
 import aiohttp_cors
-
 from app.main import instantiation_service
 from app.platform.router.router_service import RouterService
 
@@ -68,8 +67,13 @@ def create_app():
     app = web.Application(middlewares=middlewares)
 
     # setup configuration
+
     app['config'] = DB_CONFIG
 
+    # setup views and router
+    setup_routes(app, router_service.routes)
+
+    # Configure default CORS settings.
     cors = aiohttp_cors.setup(app, defaults={
         "*": aiohttp_cors.ResourceOptions(
             allow_credentials=True,
@@ -78,10 +82,7 @@ def create_app():
         )
     })
 
-    # setup views and router
-    setup_routes(app, router_service.routes)
-
-    # add cors
+    # Configure CORS on all routes.
     for route in list(app.router.routes()):
         cors.add(route)
 
@@ -99,4 +100,4 @@ def create_app():
 
 def setup_routes(app, routes: List[RouteHandler]):
     for route in routes:
-        app.router.add_route(route.request_type, route.path, route.handler, name=route.name)
+        app.router.add_route(method=route.request_type, path=route.path, handler=route.handler, name=route.name)

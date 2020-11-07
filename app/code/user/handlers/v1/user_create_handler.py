@@ -13,7 +13,7 @@ USER_CREATE_HANDLER_NAME = 'resources.user.create'
 
 
 class UserCreateHandler(RouteHandler):
-    path = '/user'
+    path = '/user/'
 
     def __init__(self, log_service: LogService, user_service: UserService, router_service: RouterService):
         super().__init__(log_service)
