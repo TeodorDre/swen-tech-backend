@@ -5,6 +5,7 @@ from sqlalchemy import sql
 from app.base.errors import DBRecordNotFoundError
 from enum import Enum
 from app.code.category.category_service import CategoryService
+from app.base.date import dt_converter
 
 
 class PostPublishedStatus(Enum):
@@ -68,7 +69,7 @@ class PostService(Disposable):
             }
 
             post_id = post.get('post_id')
-
+            post_timestamp = post.get('created_ts')
             post_title: str = ''
             post_body: str = ''
             post_slug = post.get('post_slug')
@@ -95,6 +96,7 @@ class PostService(Disposable):
                 'title': post_title,
                 'body': post_body,
                 'category': formatted_category,
+                'publishedTimestamp': dt_converter(post_timestamp),
                 'slug': post_slug
             }
 
