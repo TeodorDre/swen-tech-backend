@@ -10,4 +10,4 @@ logger:
   style: '{'
 app:
   port:
-    3000
+    3010
