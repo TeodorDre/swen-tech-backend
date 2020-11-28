@@ -96,7 +96,7 @@ class PostService(Disposable):
                 'title': post_title,
                 'body': post_body,
                 'category': formatted_category,
-                'publishedTimestamp': dt_converter(post_timestamp),
+                'publishedTimestamp': dt_converter(post_timestampccc),
                 'slug': post_slug
             }
 

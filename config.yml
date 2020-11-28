@@ -1,0 +1,13 @@
+postgres:
+  host: localhost
+  port: 32768
+  user: teodor
+  database: teodor
+  password: markup
+logger:
+  logger_level: DEBUG
+  format: '[{asctime}][{levelname}] - {name}: {message}'
+  style: '{'
+app:
+  port:
+    3000
