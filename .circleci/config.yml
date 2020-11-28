@@ -7,7 +7,7 @@ defaults: &defaults
 aliases:
   - &digital-ocean
     name: digital-ocean
-    command: ssh -o "StrictHostKeyChecking no" root@165.227.158.52 "cd ~/projects/swen-tech-backend; git stash; git pull; pip install -r requirements.txt; nodemon run.py --watch "
+    command: ssh -o "StrictHostKeyChecking no" root@165.227.158.52 "cd ~/projects/swen-tech-backend; git pull; pip install -r requirements.txt; nodemon run.py --watch "
 jobs:
   build:
     <<: *defaults
