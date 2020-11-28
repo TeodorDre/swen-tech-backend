@@ -10,9 +10,6 @@ aliases:
     command: ssh -o "StrictHostKeyChecking no" root@165.227.158.52 "cd ~/projects/swen-tech-backend; git stash; git pull; pip install -r requirements.txt;"
 jobs:
   build:
-    branches:
-      only:
-        - master
     <<: *defaults
     docker:
       - image: circleci/python:3.7.2
