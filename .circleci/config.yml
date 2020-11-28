@@ -2,9 +2,18 @@ version: 2.1
 
 orbs:
   python: circleci/python@0.2.1
-
+defaults: &defaults
+  working_directory: ~/deploy-project
+aliases:
+  - &digital-ocean
+    name: digital-ocean
+    command: ssh -o "StrictHostKeyChecking no" root@165.227.158.52 "cd ~/projects/swen-tech-backend; git stash; git pull; pip install -r requirements.txt;"
 jobs:
   build:
+    branches:
+      only:
+        - master
+    <<: *defaults
     docker:
       - image: circleci/python:3.7.2
     executor: python/default
@@ -13,7 +22,7 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
-
+      - run: *digital-ocean
 workflows:
   main:
     jobs:
