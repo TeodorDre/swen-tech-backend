@@ -21,4 +21,3 @@ yarl==1.2.6
 jsonify==0.5
 aiohttp_cors==0.7.0
 aiohttp-middlewares==1.1.0
-mimesis==4.1.1
