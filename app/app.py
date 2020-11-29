@@ -77,6 +77,9 @@ def create_app():
     cors = aiohttp_cors.setup(app, defaults={
         "*": aiohttp_cors.ResourceOptions(
             allow_credentials=True,
+            expose_headers="*",
+            allow_headers="*",
+            allow_methods="*"
         )
     })
 

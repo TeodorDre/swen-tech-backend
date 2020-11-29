@@ -9,6 +9,6 @@ logger:
   format: '[{asctime}][{levelname}] - {name}: {message}'
   style: '{'
 app:
-  version: 1.0.0
+  version: 1.0.1
   port:
     3010
