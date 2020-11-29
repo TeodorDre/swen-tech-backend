@@ -18,6 +18,6 @@ class EchoRouteHandler(RouteHandler):
 
     def handler(self, request: web.Request) -> web.Response:
         return send_success_response(self.name, {
-            'result': 'OK',
+            'status': 'OK',
             'appVersion': APP['version']
         })
